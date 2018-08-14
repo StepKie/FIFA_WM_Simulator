@@ -1,0 +1,8 @@
+target
+.DS_Store
+*.bak
+*.bbprojectd
+*.log
+workspace
+logs
+*.swp
