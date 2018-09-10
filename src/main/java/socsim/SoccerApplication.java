@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -11,6 +12,7 @@ import org.apache.commons.csv.CSVRecord;
 
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
+import ui.FussballWM;
 
 @Slf4j
 public class SoccerApplication {
@@ -20,11 +22,34 @@ public class SoccerApplication {
 	public static void main(String[] args) {
 		
 		allTeams = parseTeams("fifa_ranking_small.csv");
-		Collection<Team> participants = new ArrayList<>();
+		log.info("-----------------------------");
+		log.info("Participants:");
+		List<Team> participants = new ArrayList<>();
 		for (Confederation cf : Confederation.values()) {
 			participants.addAll(new TeamSelector(allTeams).getParticipantsFrom(cf));
 		}
+		List<Group> groups = draw(participants);
 		
+		try {
+			FussballWM window = new FussballWM(groups);
+			window.open();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static List<Group> draw(List<Team> participants) {
+		int num_groups = 8;
+		List<Group> groups = new ArrayList<>();
+		for (int i = 1; i <= num_groups; i++) {
+			Group grp = new Group(String.valueOf(i));
+			for (int j = 1; j <= 4; j++) {
+				grp.getTeams().add(participants.remove(0));
+			}
+			groups.add(grp);
+		}
+		
+		return groups;
 	}
 	
 	private static Collection<Team> parseTeams(String fileName) {

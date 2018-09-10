@@ -1,7 +1,4 @@
-package ui;
-
-import java.util.Collections;
-import java.util.List;
+package ui.old;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowData;
@@ -10,19 +7,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import socsim.Group;
+import ui.GruppenFactory;
+import ui.WMGruppe;
 
-public class FussballWM {
+public class FussballWM2 {
 	
 	protected Shell shlFussballWm;
-	List<Group> gruppen;
-	/**
-	 * @wbp.nonvisual location=94,219
-	 */
-	private final GruppenFactory gruppenFactory = new GruppenFactory();
-	
-	public FussballWM(List<Group> groups) {
-		this.gruppen = groups;
-	}
 	
 	/**
 	 * Launch the application.
@@ -31,7 +21,7 @@ public class FussballWM {
 	 */
 	public static void main(String[] args) {
 		try {
-			FussballWM window = new FussballWM(Collections.emptyList());
+			FussballWM2 window = new FussballWM2();
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,10 +54,13 @@ public class FussballWM {
 		rl_shlFussballWm.justify = true;
 		shlFussballWm.setLayout(rl_shlFussballWm);
 		
-		for (Group gruppe : gruppen) {
-			WMGruppe gruppenComp = GruppenFactory.createWMGruppe(shlFussballWm, gruppe);
-			gruppenComp.setLayoutData(new RowData(154, 97));
-		}
+		WMGruppe fenster_1 = GruppenFactory.createWMGruppe(shlFussballWm, Group.getTestGroup());
+		
+		WMGruppe fenster = GruppenFactory.createWMGruppe(shlFussballWm, Group.getTestGroup());
+		fenster.setLayoutData(new RowData(120, 120));
+		
+		WMGruppe2 fenster_2 = new WMGruppe2(shlFussballWm, SWT.NONE);
+		fenster_2.setLayoutData(new RowData(154, 97));
 		
 	}
 }
