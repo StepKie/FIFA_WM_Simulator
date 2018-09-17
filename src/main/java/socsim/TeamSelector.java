@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
+import socsim.stable.Team;
 
 @Slf4j
 public class TeamSelector {
@@ -18,9 +19,9 @@ public class TeamSelector {
 	}
 	
 	public Collection<? extends Team> getParticipantsFrom(Confederation cf) {
-		Collection<Team> all = allTeams.stream().filter(t -> t.getConfed() == cf).collect(Collectors.toList());
+		Collection<Team> fromConf = allTeams.stream().filter(t -> t.getConfed() == cf).collect(Collectors.toList());
 		log.info("Teams from {}:", cf.name);
-		Collection<Team> selected = drawByElo(all, cf.noOfParticipants);
+		Collection<Team> selected = drawByElo(fromConf, cf.noOfParticipants);
 		
 		return selected;
 	}

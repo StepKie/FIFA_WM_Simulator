@@ -1,6 +1,5 @@
 package ui;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -9,37 +8,19 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import socsim.Group;
+import socsim.stable.Group;
 
 public class FussballWM {
 	
 	protected Shell shlFussballWm;
 	List<Group> gruppen;
-	/**
-	 * @wbp.nonvisual location=94,219
-	 */
-	private final GruppenFactory gruppenFactory = new GruppenFactory();
 	
 	public FussballWM(List<Group> groups) {
 		this.gruppen = groups;
 	}
 	
 	/**
-	 * Launch the application.
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		try {
-			FussballWM window = new FussballWM(Collections.emptyList());
-			window.open();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * Open the window.
+	 * @wbp.parser.entryPoint
 	 */
 	public void open() {
 		Display display = Display.getDefault();
@@ -65,7 +46,7 @@ public class FussballWM {
 		shlFussballWm.setLayout(rl_shlFussballWm);
 		
 		for (Group gruppe : gruppen) {
-			WMGruppe gruppenComp = GruppenFactory.createWMGruppe(shlFussballWm, gruppe);
+			CGruppe gruppenComp = GruppenFactory.createWMGruppe(shlFussballWm, gruppe);
 			gruppenComp.setLayoutData(new RowData(154, 97));
 		}
 		

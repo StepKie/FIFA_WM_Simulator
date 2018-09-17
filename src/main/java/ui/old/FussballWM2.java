@@ -6,9 +6,8 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import socsim.Group;
+import ui.CGruppe;
 import ui.GruppenFactory;
-import ui.WMGruppe;
 
 public class FussballWM2 {
 	
@@ -54,9 +53,9 @@ public class FussballWM2 {
 		rl_shlFussballWm.justify = true;
 		shlFussballWm.setLayout(rl_shlFussballWm);
 		
-		WMGruppe fenster_1 = GruppenFactory.createWMGruppe(shlFussballWm, Group.getTestGroup());
+		CGruppe fenster_1 = GruppenFactory.createWMGruppe(shlFussballWm, GruppenFactory.getTestGroup());
 		
-		WMGruppe fenster = GruppenFactory.createWMGruppe(shlFussballWm, Group.getTestGroup());
+		CGruppe fenster = GruppenFactory.createWMGruppe(shlFussballWm, GruppenFactory.getTestGroup());
 		fenster.setLayoutData(new RowData(120, 120));
 		
 		WMGruppe2 fenster_2 = new WMGruppe2(shlFussballWm, SWT.NONE);
