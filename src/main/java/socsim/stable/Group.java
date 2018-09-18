@@ -100,7 +100,7 @@ public class Group implements Comparable<Group> {
 		return null;
 	}
 
-	void print(PrintStream out, boolean showTeams, boolean showMatches, boolean showSubTables) {
+	public void print(PrintStream out, boolean showTeams, boolean showMatches, boolean showSubTables) {
 		out.println(name);
 		out.println();
 		if (showTeams) {

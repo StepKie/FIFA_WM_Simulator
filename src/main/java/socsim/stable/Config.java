@@ -4,7 +4,7 @@ package socsim.stable;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import ui.GruppenFactory;
+import socsim.ui.GruppenFactory;
 
 public class Config
 {
@@ -29,7 +29,6 @@ public class Config
 	}
 
 	private void printGroups() {
-		for (Group group : groups)
-			group.print(System.out, SHOW_TEAMS, SHOW_MATCHES, SHOW_SUBTABLES);
+		groups.forEach(g -> g.print(System.out, SHOW_TEAMS, SHOW_MATCHES, SHOW_SUBTABLES));
 	}
 }

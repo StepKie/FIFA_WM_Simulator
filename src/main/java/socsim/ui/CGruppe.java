@@ -1,4 +1,4 @@
-package ui;
+package socsim.ui;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;

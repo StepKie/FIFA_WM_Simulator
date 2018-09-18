@@ -1,19 +1,12 @@
-package ui;
+package socsim.ui;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Composite;
 
-import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import socsim.Confederation;
 import socsim.stable.Group;
@@ -56,10 +49,11 @@ public final class GruppenFactory {
 	}
 
 	public static Group create_WM_Group(int id, Collection<Team> participants) {
+		log.info("Creating Group {}", id);
 		Group group = new Group(getName(id), Ranking.EURO_2012.comparator);
 		participants.forEach(p -> group.addTeam(p));
 
-
+		// TODO Logic here
 		group.addMatch(
 				new Match(new GregorianCalendar(2012, 6, 8, 18, 0), group.getTeam("POL"), group.getTeam("GRE"), 1, 1));
 		group.addMatch(
@@ -82,28 +76,6 @@ public final class GruppenFactory {
 	
 	public static final int getId(String letter) {
 		return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(letter);
-	}
-
-	public static Collection<Team> parseTeams(String fileName) {
-		Collection<Team> teams = new ArrayList<>();
-
-		try {
-			@Cleanup
-			CSVParser parser = CSVParser.parse(ClassLoader.getSystemResource(fileName).openStream(),
-					Charset.defaultCharset(), CSVFormat.EXCEL.withFirstRecordAsHeader());
-			for (CSVRecord csvRecord : parser.getRecords()) {
-				int elo = (int) Math.round(Double.parseDouble(csvRecord.get("total_points")));
-				Confederation confed = Confederation.fromString(csvRecord.get("confederation"));
-				Team newTeam = new Team(csvRecord.get("country_full"), csvRecord.get("country_abrv"), elo, confed);
-				log.info("Parsed: {}", newTeam.toString());
-				teams.add(newTeam);
-
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return teams;
 	}
 
 }
