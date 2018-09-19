@@ -2,7 +2,9 @@ package socsim;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 import socsim.stable.Group;
@@ -35,9 +37,23 @@ public class SoccerApplication {
 	}
 
 	private static List<Group> draw(Collection<Team> participants) {
-		int num_groups = 2;
+		List<Team> teamsSorted = participants.stream().sorted(Comparator.comparingInt(Team::getElo).reversed())
+				.collect(Collectors.toList());
+		List<Team>[] topf = new List[4];
+		for (int i = 0; i < 4; i++) {
+			topf[i] = teamsSorted.subList(i * 8, i * 8 + 7);
+			log.info("Topf {}: {}", i, topf[i]);
+		}
+		
+//		Collection<Team> topf1 = teamsSorted.subList(0, 7);
+//		Collection<Team> topf2 = teamsSorted.subList(8, 15);
+//		Collection<Team> topf3 = teamsSorted.subList(16, 23);
+//		Collection<Team> topf4 = teamsSorted.subList(24, 31);
+
 		List<Group> groups = new ArrayList<>();
+
 		// TODO Logic here
+		int num_groups = 8;
 		for (int i = 0; i < num_groups; i++) {
 			Group grp = GruppenFactory.create_WM_Group(i, participants);
 			groups.add(grp);

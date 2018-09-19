@@ -59,7 +59,7 @@ public class TeamSelector {
 		return selected;
 	}
 	
-	private Collection<Team> drawByElo(Collection<Team> teams, int number) {
+	private static Collection<Team> drawByElo(Collection<Team> teams, int number) {
 		Collection<Team> drawn = new ArrayList<>();
 		List<Team> urn = new ArrayList<>();
 		for (Team t : teams) {
