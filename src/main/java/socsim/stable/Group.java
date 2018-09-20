@@ -3,6 +3,7 @@ package socsim.stable;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -104,8 +105,8 @@ public class Group implements Comparable<Group> {
 		out.println(name);
 		out.println();
 		if (showTeams) {
-			for (Team team : teams)
-				out.println("  " + team + " (" + team.getId() + ")");
+			teams.stream().sorted(Comparator.comparingInt(Team::getElo).reversed())
+					.forEach(t -> out.println("  " + t + " (" + t.getId() + ")"));
 			out.println();
 		}
 		if (showMatches) {

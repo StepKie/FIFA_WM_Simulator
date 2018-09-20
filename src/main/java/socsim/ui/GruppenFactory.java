@@ -1,7 +1,7 @@
 package socsim.ui;
 
-import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowData;
@@ -48,24 +48,22 @@ public final class GruppenFactory {
 		return group;
 	}
 
-	public static Group create_WM_Group(int id, Collection<Team> participants) {
+	/**
+	 * @param id    Group id
+	 * @param teams List in the order of the seeding
+	 * @return The group with matches set
+	 */
+	public static Group create_WM_Group(int id, List<Team> teams) {
 		log.info("Creating Group {}", id);
 		Group group = new Group(getName(id), Ranking.EURO_2012.comparator);
-		participants.forEach(p -> group.addTeam(p));
-
+		teams.forEach(t -> group.addTeam(t));
 		// TODO Logic here
-		group.addMatch(
-				new Match(new GregorianCalendar(2012, 6, 8, 18, 0), group.getTeam("POL"), group.getTeam("GRE"), 1, 1));
-		group.addMatch(
-				new Match(new GregorianCalendar(2012, 6, 8, 20, 45), group.getTeam("RUS"), group.getTeam("CZE"), 4, 1));
-		group.addMatch(
-				new Match(new GregorianCalendar(2012, 6, 12, 18, 0), group.getTeam("GRE"), group.getTeam("CZE"), 1, 2));
-		group.addMatch(new Match(new GregorianCalendar(2012, 6, 12, 20, 45), group.getTeam("POL"), group.getTeam("RUS"),
-				1, 1));
-		group.addMatch(new Match(new GregorianCalendar(2012, 6, 16, 20, 45), group.getTeam("GRE"), group.getTeam("RUS"),
-				1, 0));
-		group.addMatch(new Match(new GregorianCalendar(2012, 6, 16, 20, 45), group.getTeam("CZE"), group.getTeam("POL"),
-				1, 0));
+		group.addMatch(new Match(new GregorianCalendar(2012, 6, 8, 18, 0), teams.get(0), teams.get(1)));
+		group.addMatch(new Match(new GregorianCalendar(2012, 6, 8, 20, 45), teams.get(2), teams.get(3)));
+		group.addMatch(new Match(new GregorianCalendar(2012, 6, 12, 18, 0), teams.get(0), teams.get(2)));
+		group.addMatch(new Match(new GregorianCalendar(2012, 6, 12, 20, 45), teams.get(1), teams.get(3)));
+		group.addMatch(new Match(new GregorianCalendar(2012, 6, 16, 20, 45), teams.get(0), teams.get(3)));
+		group.addMatch(new Match(new GregorianCalendar(2012, 6, 16, 20, 45), teams.get(1), teams.get(1)));
 
 		return group;
 	}

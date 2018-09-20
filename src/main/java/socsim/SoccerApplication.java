@@ -2,6 +2,7 @@ package socsim;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +18,7 @@ public class SoccerApplication {
 	// Print options
 	private static final boolean SHOW_TEAMS = true;
 	private static final boolean SHOW_MATCHES = true;
-	private static final boolean SHOW_SUBTABLES = true;
+	private static final boolean SHOW_SUBTABLES = false;
 
 	public static void main(String[] args) {
 
@@ -37,29 +38,46 @@ public class SoccerApplication {
 	}
 
 	private static List<Group> draw(Collection<Team> participants) {
+		int num_groups = 8;
+		int teamsInGrp = 4;
 		List<Team> teamsSorted = participants.stream().sorted(Comparator.comparingInt(Team::getElo).reversed())
 				.collect(Collectors.toList());
-		List<Team>[] topf = new List[4];
-		for (int i = 0; i < 4; i++) {
-			topf[i] = teamsSorted.subList(i * 8, i * 8 + 7);
+
+		List<Team>[] topf = new List[teamsInGrp];
+		for (int i = 0; i < teamsInGrp; i++) {
+			topf[i] = teamsSorted.subList(i * num_groups, i * num_groups + 8);
+			Collections.shuffle(topf[i]);
 			log.info("Topf {}: {}", i, topf[i]);
 		}
-		
-//		Collection<Team> topf1 = teamsSorted.subList(0, 7);
-//		Collection<Team> topf2 = teamsSorted.subList(8, 15);
-//		Collection<Team> topf3 = teamsSorted.subList(16, 23);
-//		Collection<Team> topf4 = teamsSorted.subList(24, 31);
-
-		List<Group> groups = new ArrayList<>();
-
-		// TODO Logic here
-		int num_groups = 8;
+		List<Team>[] gruppe = new List[num_groups];
 		for (int i = 0; i < num_groups; i++) {
-			Group grp = GruppenFactory.create_WM_Group(i, participants);
-			groups.add(grp);
+			gruppe[i] = new ArrayList<>();
 		}
 
-		return groups;
+		// TODO: Ensure that we can add confederation rule is not violated
+		for (int i = 0; i < num_groups; i++) {
+			for (int j = 0; j < teamsInGrp; j++) {
+				gruppe[i].add(topf[j].get(i));
+			}
+		}
+
+		List<Group> grps = new ArrayList<>();
+		for (int i = 0; i < num_groups; i++) {
+			Group grp = GruppenFactory.create_WM_Group(i, gruppe[i]);
+			grps.add(grp);
+		}
+
+		return grps;
+	}
+
+	private static boolean canAdd(Collection<Team> teams, Team toAdd) {
+		if (teams.contains(toAdd))
+			return false;
+		Confederation cf = toAdd.getConfed();
+		long same_cf = teams.stream().filter(t -> t.getConfed() == cf).count();
+		// There may be no team from the same Confederation in the Group (except UEFA,
+		// where 1 may be in there for a max total of 2)
+		return (cf == Confederation.UEFA) ? same_cf <= 1 : same_cf == 0;
 	}
 
 }
