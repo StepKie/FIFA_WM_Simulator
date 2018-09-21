@@ -57,8 +57,8 @@ public class SoccerApplication {
 		System.out.println("------------------------------------------------");
 		// TODO K-o matches (new subclass?)
 		Match vf1 = new Match(date, af1.getWinner(), af2.getWinner(), true);
-		Match vf2 = new Match(date, af3.getWinner(), af4.getWinner(), true);
-		Match vf3 = new Match(date, af5.getWinner(), af6.getWinner(), true);
+		Match vf2 = new Match(date, af5.getWinner(), af6.getWinner(), true);
+		Match vf3 = new Match(date, af3.getWinner(), af4.getWinner(), true);
 		Match vf4 = new Match(date, af7.getWinner(), af8.getWinner(), true);
 		
 		System.out.println("1/4 Final");
