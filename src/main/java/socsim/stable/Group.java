@@ -17,7 +17,7 @@ public class Group implements Comparable<Group> {
 	@Getter private String name;
 	@Getter private SortedSet<Team> teams = new TreeSet<Team>();
 	@Getter private SortedSet<Match> matches = new TreeSet<Match>();
-	private Table table;
+	@Getter private Table table;
 
 	public Group(String id, TableRowComparator comparator) {
 		this.id = id;
@@ -93,6 +93,13 @@ public class Group implements Comparable<Group> {
 		return null;
 	}
 
+	/**
+	 * @return Team at position x (1-number of places)
+	 */
+	public Team getTeam(int position) {
+		return getTable().getRows().get(position - 1).getTeam();
+	}
+
 	public Match getMatch(String id) {
 		for (Match match : matches) {
 			if (id.equals(match.getId()))
@@ -106,17 +113,12 @@ public class Group implements Comparable<Group> {
 		out.println();
 		if (showTeams) {
 			teams.stream().sorted(Comparator.comparingInt(Team::getElo).reversed())
-					.forEach(t -> out.println("  " + t + " (" + t.getId() + ")"));
+					.forEach(t -> out.println("  " + t + " (" + t.getId() + ", " + t.getElo() + ")"));
 			out.println();
 		}
 		if (showMatches) {
 			for (Match match : matches) {
-				out.println(String.format(
-					"  %tF %tR    %-12s  -  %-12s    %2d : %2d",
-					match.getDate(), match.getDate(),
-					match.getHomeTeam(), match.getGuestTeam(),
-					match.getHomeScore(), match.getGuestScore()
-				));
+				out.println(match.toString());
 			}
 			out.println();
 		}

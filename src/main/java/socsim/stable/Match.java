@@ -6,13 +6,15 @@ import java.util.Random;
 import org.apache.commons.math3.distribution.EnumeratedIntegerDistribution;
 import org.apache.commons.math3.distribution.IntegerDistribution;
 
+import lombok.Getter;
+
 public class Match implements Comparable<Match> {
-	private String id;
-	private Calendar date;
-	private Team homeTeam;
-	private Team guestTeam;
-	private int homeScore = -1;
-	private int guestScore = -1;
+	@Getter private String id;
+	@Getter private Calendar date;
+	@Getter private Team homeTeam;
+	@Getter private Team guestTeam;
+	@Getter private int homeScore = -1;
+	@Getter private int guestScore = -1;
 
 	public Match(Calendar date, Team homeTeam, Team guestTeam, int homeScore, int guestScore) {
 		this.date = date;
@@ -43,30 +45,7 @@ public class Match implements Comparable<Match> {
 
 	@Override
 	public String toString() {
-		return getId();
-	}
-
-	String getId() {
-		return id;
-	}
-
-	Calendar getDate() {
-		return date;
-	}
-
-	public Team getHomeTeam() {
-		return homeTeam;
-	}
-
-	public Team getGuestTeam() {
-		return guestTeam;
-	}
-
-	int getHomeScore() {
-		return homeScore;
-	}
-
-	int getGuestScore() {
-		return guestScore;
+		return String.format("  %tF %tR    %-20s  -  %-20s    %2d : %2d", date, date, homeTeam, guestTeam, homeScore,
+				guestScore);
 	}
 }

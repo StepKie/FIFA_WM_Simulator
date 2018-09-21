@@ -196,7 +196,7 @@ public class Table
 
 		private void print(PrintStream out, String indent) {
 			out.println(String.format(
-				indent + "%3d  %-12s  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d",
+					indent + "%3d  %-12s  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d",
 				rank, team.getName(),
 				matchesPlayed, matchesWon, matchesDrawn, matchesLost,
 				goalsFor, goalsAgainst, goalsDifference, goalsAway,

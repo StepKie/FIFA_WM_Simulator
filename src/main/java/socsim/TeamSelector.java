@@ -35,7 +35,7 @@ public class TeamSelector {
 			for (CSVRecord csvRecord : parser.getRecords()) {
 				int elo = (int) Math.round(Double.parseDouble(csvRecord.get("total_points")));
 				Confederation confed = Confederation.fromString(csvRecord.get("confederation"));
-				teams.add(new Team(csvRecord.get("country_full"), csvRecord.get("country_abrv"), elo, confed));
+				teams.add(new Team(csvRecord.get("country_abrv"), csvRecord.get("country_full"), elo, confed));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
