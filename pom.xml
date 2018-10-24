@@ -3,7 +3,7 @@
   <groupId>soccer-simulation</groupId>
   <artifactId>soccer-simulation</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <description>tournament elo simulator</description>
+  <description>FIFA WM simulator</description>
   <build>
     <plugins>
       <plugin>
