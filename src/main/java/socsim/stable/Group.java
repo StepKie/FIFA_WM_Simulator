@@ -16,7 +16,7 @@ public class Group implements Comparable<Group> {
 	private String id;
 	@Getter private String name;
 	@Getter private SortedSet<Team> teams = new TreeSet<Team>();
-	@Getter private SortedSet<Match> matches = new TreeSet<Match>();
+	@Getter private List<Match> matches = new ArrayList<Match>();
 	@Getter private Table table;
 
 	public Group(String id, TableRowComparator comparator) {
@@ -98,14 +98,6 @@ public class Group implements Comparable<Group> {
 	 */
 	public Team getTeam(int position) {
 		return getTable().getRows().get(position - 1).getTeam();
-	}
-
-	public Match getMatch(String id) {
-		for (Match match : matches) {
-			if (id.equals(match.getId()))
-				return match;
-		}
-		return null;
 	}
 
 	public void print(PrintStream out, boolean showTeams, boolean showMatches, boolean showSubTables) {

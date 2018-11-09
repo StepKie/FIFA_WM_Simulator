@@ -261,6 +261,10 @@ public class Table
 			return goalsFor;
 		}
 
+		public int getGoalsAgainst() {
+			return goalsAgainst;
+		}
+
 		public int getGoalsDifference() {
 			return goalsDifference;
 		}
