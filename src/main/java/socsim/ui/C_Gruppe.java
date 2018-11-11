@@ -9,7 +9,7 @@ import socsim.stable.Group;
 import socsim.stable.Match;
 import socsim.stable.Table.Row;
 
-public class CGruppe extends Composite {
+public class C_Gruppe extends Composite {
 	private Group gruppe;
 
 	Label[] teamName = new Label[4];
@@ -22,7 +22,7 @@ public class CGruppe extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public CGruppe(Composite parent, int style, Group gruppe) {
+	public C_Gruppe(Composite parent, int style, Group gruppe) {
 		super(parent, style);
 		this.gruppe = gruppe;
 		setLayout(new GridLayout(4, false));

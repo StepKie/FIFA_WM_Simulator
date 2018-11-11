@@ -1,6 +1,6 @@
 package socsim.stable;
 
-import java.util.Calendar;
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.Random;
 
@@ -13,27 +13,25 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class Match implements Comparable<Match> {
-	@Getter @NonNull private Calendar date;
+	@Getter @NonNull private Instant date;
 	@Getter @NonNull private Team homeTeam;
 	@Getter @NonNull private Team guestTeam;
 	@Getter private int homeScore = -1;
 	@Getter private int guestScore = -1;
 	@Getter private boolean ko = false;
 	@Getter private boolean finished = false;
-
-
-
-	public Match(Calendar date, Team homeTeam, Team guestTeam, boolean ko) {
+	
+	public Match(Instant date, Team homeTeam, Team guestTeam, boolean ko) {
 		this(date, homeTeam, guestTeam);
 		this.ko = ko;
 	}
-
-	public Match(Calendar date, Team homeTeam, Team guestTeam, int homeScore, int guestScore) {
+	
+	public Match(Instant date, Team homeTeam, Team guestTeam, int homeScore, int guestScore) {
 		this(date, homeTeam, guestTeam);
 		this.homeScore = homeScore;
 		this.guestScore = guestScore;
 	}
-
+	
 	public void play() {
 		String nV = "";
 		int[] goals = new int[] { 0, 1, 2, 3, 4, 5, 6 };
@@ -55,29 +53,30 @@ public class Match implements Comparable<Match> {
 			} else {
 				guestScore += 2;
 			}
-
+			
 		}
 		System.out.println(toString() + nV);
 		finished = true;
 	}
-
+	
 	@Override
 	public String toString() {
-		return String.format("  %tF %tR    %-20s  -  %-20s    %2d : %2d", date, date, homeTeam, guestTeam, homeScore,
+		return String.format("  %s    %-20s  -  %-20s    %2d : %2d", date.toString(), homeTeam, guestTeam, homeScore,
 				guestScore);
 	}
-
+	
 	public Team getWinner() {
-
+		
 		if (homeScore > guestScore)
 			return homeTeam;
 		if (guestScore > homeScore)
 			return guestTeam;
 		return null;
 	}
-
+	
 	@Override
 	public int compareTo(Match o) {
-		return Comparator.comparing(Match::getDate).thenComparing(Match::getHomeTeam).thenComparing(Match::getGuestTeam).compare(this, o);
+		return Comparator.comparing(Match::getDate).thenComparing(Match::getHomeTeam).thenComparing(Match::getGuestTeam)
+				.compare(this, o);
 	}
 }
