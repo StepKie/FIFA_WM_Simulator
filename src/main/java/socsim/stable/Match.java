@@ -17,8 +17,8 @@ public class Match implements Comparable<Match> {
 	@Getter @NonNull private Instant date;
 	@Getter @NonNull private Team homeTeam;
 	@Getter @NonNull private Team guestTeam;
-	@Getter private int homeScore = 0;
-	@Getter private int guestScore = 0;
+	@Getter private int homeScore = -1;
+	@Getter private int guestScore = -1;
 	@Getter private boolean ko = false;
 	@Getter private boolean finished = false;
 
@@ -37,7 +37,6 @@ public class Match implements Comparable<Match> {
 	}
 	
 	public void play() {
-		String nV = "";
 
 		// TODO Adjust for team elos
 		int eloDiff = homeTeam.getElo() - guestTeam.getElo();
@@ -49,8 +48,11 @@ public class Match implements Comparable<Match> {
 		// Playing around below, fix eventually ...
 //		double expectedScoreElo = 1 / (1 + (Math.pow(10, ((double) homeTeam.getElo() - (double) guestTeam.getElo()) / 400)));
 
-		double expectedScoreElo = 1 / (1 + (Math.pow(10, ((double) homeTeam.getElo() - (double) guestTeam.getElo()) / 1500)));
+		double expectedScoreElo = 1 / (1 + (Math.pow(10, ((double) homeTeam.getElo() - (double) guestTeam.getElo()) / 2000)));
 
+		homeScore = 0;
+		guestScore = 0;
+		String nV = "";
 		while (totalGoals > 0) {
 			double rd = new Random().nextDouble();
 			if (rd > expectedScoreElo) {

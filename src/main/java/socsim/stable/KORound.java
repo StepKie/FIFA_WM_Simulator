@@ -16,7 +16,7 @@ public class KORound {
 	@Getter List<Match> matches = new ArrayList<>();
 	Instant startDate = new GregorianCalendar(2012, 6, 30, 16, 0).toInstant();
 
-	public KORound(String name, List<Team> teams, Instant date) {
+	public KORound(List<Team> teams, Instant date) {
 		// TODO May use pairing strategy here
 		for (int i = 0; i < teams.size(); i = i + 2) {
 			matches.add(new Match(date, teams.get(i), teams.get(i + 1), true));
@@ -51,11 +51,11 @@ public class KORound {
 			Collections.swap(nextRound, 3, 5);
 		}
 
-		return new KORound(getRoundName(nextRound.size()), nextRound, date);
+		return new KORound(nextRound, date);
 
 	}
 
-	private String getRoundName(int size) {
+	public String getRoundName(int size) {
 		switch (size) {
 		case 16:
 			return "Achtelfinale";

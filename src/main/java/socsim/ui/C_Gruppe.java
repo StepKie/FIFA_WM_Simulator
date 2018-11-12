@@ -1,8 +1,11 @@
 package socsim.ui;
 
+import java.util.stream.Stream;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import socsim.stable.Group;
@@ -15,6 +18,7 @@ public class C_Gruppe extends Composite {
 	Label[] teamName = new Label[4];
 	Label[] teamPoints = new Label[4];
 	Label[] teamGoals = new Label[4];
+	Label[] pairing = new Label[6];
 	Label[] result = new Label[6];
 	/**
 	 * Create the composite.
@@ -42,7 +46,9 @@ public class C_Gruppe extends Composite {
 		emptyRow();
 
 		createMatches();
-		refresh();
+
+		refresh(null);
+		setInvisible();
 	}
 
 	private void emptyRow() {
@@ -65,16 +71,17 @@ public class C_Gruppe extends Composite {
 		for (int i = 0; i < gruppe.getMatches().size(); i++) {
 			Match m = gruppe.getMatches().get(i);
 			new Label(this, SWT.NONE);
-			Label pairing = new Label(this, SWT.NONE);
+			pairing[i] = new Label(this, SWT.NONE);
 			String text = m.getHomeTeam().getId() + " - " + m.getGuestTeam().getId();
-			pairing.setText(text);
+			pairing[i].setText(text);
+			pairing[i].setData(m);
 			new Label(this, SWT.NONE);
 			result[i] = new Label(this, SWT.NONE);
 			result[i].setText("-:-");
 		}
 	}
 
-	public void refresh() {
+	public void refresh(Match played) {
 		gruppe.getTable().refresh();
 		for (int i = 0; i <= 3; i++) {
 			Row r = gruppe.getTable().getRows().get(i);
@@ -90,7 +97,34 @@ public class C_Gruppe extends Composite {
 			}
 			
 		}
+
+		if (played != null) {
+			for (Label matchLabel : pairing) {
+				int colorId = matchLabel.getData().equals(played) ? SWT.COLOR_RED : SWT.COLOR_WIDGET_FOREGROUND;
+				matchLabel.setForeground(Display.getCurrent().getSystemColor(colorId));
+
+			}
+		}
 		// Without this call to layout, labels are not refreshed correctly
 		layout();
+	}
+
+	private void setInvisible() {
+
+		Stream.of(teamName).forEach(l -> l.setVisible(false));
+		Stream.of(teamPoints).forEach(l -> l.setVisible(false));
+		Stream.of(teamGoals).forEach(l -> l.setVisible(false));
+		Stream.of(pairing).forEach(l -> l.setVisible(false));
+		Stream.of(result).forEach(l -> l.setVisible(false));
+	}
+	public void reveal(int index) {
+		teamName[index].setVisible(true);
+
+		if (index == 3) {
+			Stream.of(teamPoints).forEach(l -> l.setVisible(true));
+			Stream.of(teamGoals).forEach(l -> l.setVisible(true));
+			Stream.of(pairing).forEach(l -> l.setVisible(true));
+			Stream.of(result).forEach(l -> l.setVisible(true));
+		}
 	}
 }

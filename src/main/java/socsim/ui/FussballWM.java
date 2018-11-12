@@ -22,10 +22,15 @@ public class FussballWM {
 	
 	protected Shell shlFussballWm;
 	List<Group> gruppen;
+
 	KORound koRunde;
+	private C_KOPhase koPhase;
+
 	List<C_Gruppe> gruppenComps = new ArrayList<>();
 	private Iterator<C_KOMatch> koSpiele;
+	private int revealed;
 	
+
 	public FussballWM(List<Group> groups) {
 		this.gruppen = groups;
 	}
@@ -63,12 +68,20 @@ public class FussballWM {
 			gruppenComp.setLayoutData(new RowData(180, 280));
 		}
 		// new C_KOPhase(shlFussballWm, SWT.NONE);
-		C_KOPhase koPhase = new C_KOPhase(shlFussballWm, SWT.BORDER);
+		koPhase = new C_KOPhase(shlFussballWm, SWT.BORDER);
 		koSpiele = koPhase.getMatches().iterator();
 		shlFussballWm.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+				if (revealed < 32) {
+					int gruppe = revealed % 8;
+					int index = revealed / 8;
+					gruppenComps.get(gruppe).reveal(index);
+
+					revealed++;
+				} else {
 				playNextGame();
+				}
 			}
 		});
 		
@@ -78,15 +91,16 @@ public class FussballWM {
 		Match vorrunde_Next = gruppen.stream().flatMap(g -> g.getMatches().stream()).filter(m -> !m.isFinished()).sorted().findFirst().orElse(null);
 		if (vorrunde_Next != null) {
 			vorrunde_Next.play();
-			gruppenComps.forEach(C_Gruppe::refresh);
+			gruppenComps.forEach(cgruppe -> cgruppe.refresh(vorrunde_Next));
 		} else {
 			if (koRunde == null) {
 				Instant date = new GregorianCalendar(2012, 6, 30, 16, 0).toInstant();
-				koRunde = new KORound("Achtelfinale", KORound.getAF(gruppen), date);
+				koRunde = new KORound(KORound.getAF(gruppen), date);
 			} else if (koRunde.isFinished()) {
 				if (koRunde.getMatches().size() > 1) {
 					koRunde = koRunde.createNextRound();
 				} else {
+					koPhase.showFinale(koRunde.getMatches().get(0));
 					System.err.println("WINNER: " + koRunde.getMatches().get(0).getWinner());
 					return;
 				}

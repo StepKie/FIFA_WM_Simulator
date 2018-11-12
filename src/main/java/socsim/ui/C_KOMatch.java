@@ -33,7 +33,6 @@ public class C_KOMatch extends Composite {
 		
 		label_score1 = new Label(this, SWT.NONE);
 		label_score1.setAlignment(SWT.RIGHT);
-		label_score1.setText("3");
 		
 		label_team2 = new Label(this, SWT.NONE);
 		
@@ -41,8 +40,12 @@ public class C_KOMatch extends Composite {
 		label_team2.setText(match != null ? match.getGuestTeam().toString() : "Team 2");
 		
 		label_score2 = new Label(this, SWT.NONE);
-		label_score2.setText("1");
 		
+		label_team1.setVisible(false);
+		label_team2.setVisible(false);
+		label_score1.setVisible(false);
+		label_score2.setVisible(false);
+
 		GridData gd_composite_komatch = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_composite_komatch.heightHint = 50;
 		gd_composite_komatch.widthHint = 100;
@@ -69,6 +72,11 @@ public class C_KOMatch extends Composite {
 		label_team2.setText(m.getGuestTeam().toString());
 		label_score1.setText(Integer.toString(m.getHomeScore()));
 		label_score2.setText(Integer.toString(m.getGuestScore()));
+
+		label_team1.setVisible(true);
+		label_team2.setVisible(true);
+		label_score1.setVisible(true);
+		label_score2.setVisible(true);
 
 		layout();
 	}
