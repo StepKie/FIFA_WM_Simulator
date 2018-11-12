@@ -6,8 +6,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import socsim.stable.Match;
+
 public class C_KOMatch extends Composite {
 	
+	private Match match;
+	private Label label_team1;
+	private Label label_score1;
+	private Label label_team2;
+	private Label label_score2;
 	/**
 	 * Create the composite.
 	 * 
@@ -16,24 +23,24 @@ public class C_KOMatch extends Composite {
 	 */
 	public C_KOMatch(Composite parent, int style, boolean reversed) {
 		super(parent, style);
+
 		setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 2));
 		setLayout(new GridLayout(2, false));
 		
-		Label label_team1 = new Label(this, SWT.NONE);
+		label_team1 = new Label(this, SWT.NONE);
 		label_team1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		label_team1.setText("Team 1");
+		label_team1.setText(match != null ? match.getHomeTeam().toString() : "Team 1");
 		
-		Label label_score1 = new Label(this, SWT.NONE);
+		label_score1 = new Label(this, SWT.NONE);
 		label_score1.setAlignment(SWT.RIGHT);
 		label_score1.setText("3");
 		
-		Label label_team2 = new Label(this, SWT.NONE);
+		label_team2 = new Label(this, SWT.NONE);
 		
-		layout();
 		label_team2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		label_team2.setText("Team 2");
+		label_team2.setText(match != null ? match.getGuestTeam().toString() : "Team 2");
 		
-		Label label_score2 = new Label(this, SWT.NONE);
+		label_score2 = new Label(this, SWT.NONE);
 		label_score2.setText("1");
 		
 		GridData gd_composite_komatch = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -43,7 +50,9 @@ public class C_KOMatch extends Composite {
 		
 		if (reversed) {
 			label_score1.moveAbove(label_team1);
+			label_team1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 			label_score2.moveAbove(label_team2);
+			label_team2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 		}
 		
 	}
@@ -51,7 +60,16 @@ public class C_KOMatch extends Composite {
 	/**
 	 * @wbp.factory
 	 */
-	public static Composite createCompositeKoMatch(Composite parent, boolean reversed) {
-		return new C_KOMatch(parent, SWT.NONE, reversed);
+	public static C_KOMatch createCompositeKoMatch(Composite parent, boolean reversed) {
+		return new C_KOMatch(parent, SWT.BORDER, reversed);
+	}
+
+	public void updateMatch(Match m) {
+		label_team1.setText(m.getHomeTeam().toString());
+		label_team2.setText(m.getGuestTeam().toString());
+		label_score1.setText(Integer.toString(m.getHomeScore()));
+		label_score2.setText(Integer.toString(m.getGuestScore()));
+
+		layout();
 	}
 }

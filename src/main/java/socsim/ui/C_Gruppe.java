@@ -93,9 +93,4 @@ public class C_Gruppe extends Composite {
 		// Without this call to layout, labels are not refreshed correctly
 		layout();
 	}
-
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
-	}
 }
