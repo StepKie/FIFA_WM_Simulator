@@ -22,15 +22,14 @@ public class FussballWM {
 	
 	protected Shell shlFussballWm;
 	List<Group> gruppen;
-
+	
 	KORound koRunde;
 	private C_KOPhase koPhase;
-
+	
 	List<C_Gruppe> gruppenComps = new ArrayList<>();
 	private Iterator<C_KOMatch> koSpiele;
 	private int revealed;
 	
-
 	public FussballWM(List<Group> groups) {
 		this.gruppen = groups;
 	}
@@ -58,7 +57,7 @@ public class FussballWM {
 		shlFussballWm = new Shell();
 		shlFussballWm.setSize(850, 1100);
 		shlFussballWm.setText("Fussball WM");
-
+		
 		RowLayout rl_shlFussballWm = new RowLayout(SWT.HORIZONTAL);
 		shlFussballWm.setLayout(rl_shlFussballWm);
 		
@@ -67,7 +66,7 @@ public class FussballWM {
 			gruppenComps.add(gruppenComp);
 			gruppenComp.setLayoutData(new RowData(180, 280));
 		}
-		// new C_KOPhase(shlFussballWm, SWT.NONE);
+		
 		koPhase = new C_KOPhase(shlFussballWm, SWT.BORDER);
 		koSpiele = koPhase.getMatches().iterator();
 		shlFussballWm.addKeyListener(new KeyAdapter() {
@@ -77,10 +76,10 @@ public class FussballWM {
 					int gruppe = revealed % 8;
 					int index = revealed / 8;
 					gruppenComps.get(gruppe).reveal(index);
-
+					
 					revealed++;
 				} else {
-				playNextGame();
+					playNextGame();
 				}
 			}
 		});
@@ -88,7 +87,8 @@ public class FussballWM {
 	}
 	
 	public void playNextGame() {
-		Match vorrunde_Next = gruppen.stream().flatMap(g -> g.getMatches().stream()).filter(m -> !m.isFinished()).sorted().findFirst().orElse(null);
+		Match vorrunde_Next = gruppen.stream().flatMap(g -> g.getMatches().stream()).filter(m -> !m.isFinished())
+				.sorted().findFirst().orElse(null);
 		if (vorrunde_Next != null) {
 			vorrunde_Next.play();
 			gruppenComps.forEach(cgruppe -> cgruppe.refresh(vorrunde_Next));

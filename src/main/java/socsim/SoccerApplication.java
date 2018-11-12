@@ -18,7 +18,7 @@ public class SoccerApplication {
 	
 	public static void main(String[] args) {
 		
-		Collection<Team> allTeams = TeamSelector.parseTeams("fifa_ranking_small.csv");
+		Collection<Team> allTeams = TeamSelector.parseTeams();
 		log.info("-----------------------------");
 		log.info("Participants:");
 		Collection<Team> participants = new TeamSelector(allTeams).getParticipants();

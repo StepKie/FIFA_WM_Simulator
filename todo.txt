@@ -1,7 +1,11 @@
 - Flags
-- Update next round when pairing is clear immediately
-- Show "n.V.", (n.E.)
+- Update next round when pairing is clear immediately (greyed out for 1/8 final when not sure)
+
 - Fix TODOs
 - Allow fine-tuning of progress (individual goals <--> skip over entire phases)
 - Reset button
 - Beautification (Alignment, etc. pp.)
+
+DONE
+
+- Show "n.V.", (n.E.)

@@ -20,8 +20,9 @@ public class Match implements Comparable<Match> {
 	@Getter private int homeScore = -1;
 	@Getter private int guestScore = -1;
 	@Getter private boolean ko = false;
+	@Getter private boolean verlängerung = false;
 	@Getter private boolean finished = false;
-
+	
 	// Base goal scoring probabilities
 	public static final double[] base_probabilities = new double[] { 0.21, 0.3, 0.27, 0.15, 0.05, 0.01, 0.01 };;
 	
@@ -37,19 +38,21 @@ public class Match implements Comparable<Match> {
 	}
 	
 	public void play() {
-
+		
 		// TODO Adjust for team elos
 		int eloDiff = homeTeam.getElo() - guestTeam.getElo();
-		double eloScaleFactor = 0.001 *eloDiff;
+		double eloScaleFactor = 0.001 * eloDiff;
 		
 		IntegerDistribution dist = new PoissonDistribution(2.5 + eloScaleFactor);
 		int totalGoals = dist.sample();
 		// Original formula - produces high values, because it is applied to each goal.
 		// Playing around below, fix eventually ...
-//		double expectedScoreElo = 1 / (1 + (Math.pow(10, ((double) homeTeam.getElo() - (double) guestTeam.getElo()) / 400)));
-
-		double expectedScoreElo = 1 / (1 + (Math.pow(10, ((double) homeTeam.getElo() - (double) guestTeam.getElo()) / 2000)));
-
+		// double expectedScoreElo = 1 / (1 + (Math.pow(10, ((double) homeTeam.getElo() - (double) guestTeam.getElo()) /
+		// 400)));
+		
+		double expectedScoreElo = 1
+				/ (1 + (Math.pow(10, ((double) homeTeam.getElo() - (double) guestTeam.getElo()) / 2000)));
+		
 		homeScore = 0;
 		guestScore = 0;
 		String nV = "";
@@ -64,6 +67,7 @@ public class Match implements Comparable<Match> {
 		}
 		// TODO Remove hack
 		if (ko && homeScore == guestScore) {
+			verlängerung = true;
 			nV = " (n.V.)";
 			double rd = new Random().nextDouble();
 			if (rd < 0.1) {
@@ -101,10 +105,9 @@ public class Match implements Comparable<Match> {
 		return Comparator.comparing(Match::getDate).thenComparing(Match::getHomeTeam).thenComparing(Match::getGuestTeam)
 				.compare(this, o);
 	}
-
+	
 	/**
-	 * @param eloFactor Positive numbers increase towards more goals scored,
-	 *                  negative values vice versa
+	 * @param eloFactor Positive numbers increase towards more goals scored, negative values vice versa
 	 */
 	public IntegerDistribution goalDistribution(int eloFactor) {
 		int[] goals = new int[] { 0, 1, 2, 3, 4, 5, 6 };
