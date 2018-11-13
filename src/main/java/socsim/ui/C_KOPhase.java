@@ -163,7 +163,7 @@ public class C_KOPhase extends Composite {
 		int colorId = SWT.COLOR_DARK_GREEN;
 		CLabel winner = match.getWinner().equals(match.getHomeTeam()) ? lbl_finale_t1 : lbl_finale_t2;
 		winner.setForeground(Display.getCurrent().getSystemColor(colorId));
-//		winner.setFont(SWTResourceManager.getFont("Segoe Script", 11, SWT.NORMAL));
+		winner.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
 		
 		for (Control c : finale.getChildren())
 			c.setVisible(true);
