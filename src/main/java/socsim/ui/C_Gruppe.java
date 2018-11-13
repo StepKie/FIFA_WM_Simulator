@@ -4,6 +4,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -16,7 +17,7 @@ import socsim.stable.Table.Row;
 public class C_Gruppe extends Composite {
 	private Group gruppe;
 	
-	Label[] teamName = new Label[4];
+	CLabel[] teamName = new CLabel[4];
 	Label[] teamPoints = new Label[4];
 	Label[] teamGoals = new Label[4];
 	Label[] pairing = new Label[6];
@@ -36,12 +37,12 @@ public class C_Gruppe extends Composite {
 		super(parent, style);
 		this.gruppe = gruppe;
 		setLayout(new GridLayout(4, false));
-		new Label(this, SWT.NONE);
+		setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
 		
-		Label lblGruppenname = new Label(this, SWT.NONE);
+
+		Label lblGruppenname = new Label(this, SWT.CENTER);
+		lblGruppenname.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 4, 1));
 		lblGruppenname.setText(gruppe.getName());
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
 		
 		emptyRow();
 		createRow(0);
@@ -65,12 +66,12 @@ public class C_Gruppe extends Composite {
 	}
 	
 	private void createRow(int i) {
-		CLabel position = new CLabel(this, SWT.NONE);
-		position.setImage(gruppe.getTeam(2).getFlag());
+		Label position = new Label(this, SWT.NONE);
+		position.setImage(gruppe.getTeam(i + 1).getFlag());
 		// Label position = new Label(this, SWT.NONE);
 		position.setText(Integer.toString(i + 1));
 		// TODO Do all that stuff by parsing from Table row ...
-		teamName[i] = new Label(this, SWT.NONE);
+		teamName[i] = new CLabel(this, SWT.NONE);
 		teamPoints[i] = new Label(this, SWT.NONE);
 		teamGoals[i] = new Label(this, SWT.NONE);
 	}
@@ -93,7 +94,12 @@ public class C_Gruppe extends Composite {
 		gruppe.getTable().refresh();
 		for (int i = 0; i <= 3; i++) {
 			Row r = gruppe.getTable().getRows().get(i);
-			teamName[i].setText(r.getTeam().toString());
+			String tName = r.getTeam().toString();
+			if (tName.length() > 20)
+				tName = tName.substring(0, 20).concat(".");
+			teamName[i].setText(tName);
+			teamName[i].setImage(r.getTeam().getFlag());
+			teamName[i].setToolTipText(r.getTeam().toString() + "\n Stärke:" + r.getTeam().getElo());
 			teamPoints[i].setText(Integer.toString(r.getPoints()));
 			teamGoals[i].setText(r.getGoalsFor() + ":" + r.getGoalsAgainst());
 		}

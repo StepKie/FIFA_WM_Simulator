@@ -4,14 +4,20 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 import lombok.Getter;
+import socsim.SoccerApplication;
 import socsim.stable.Match;
 
 public class C_KOPhase extends Composite {
@@ -19,9 +25,11 @@ public class C_KOPhase extends Composite {
 	@Getter List<C_KOMatch> matches;
 	
 	private Composite finale;
-	private Label lbl_finale_t2;
+	private CLabel lbl_finale_t2;
 	private Label final_result;
-	private Label lbl_finale_t1;
+	private CLabel lbl_finale_t1;
+
+	private Button btnAgain;
 	
 	/**
 	 * Create the composite.
@@ -33,7 +41,7 @@ public class C_KOPhase extends Composite {
 		super(parent, style);
 		setLayout(new GridLayout(7, false));
 		
-		C_KOMatch c_af1 = C_KOMatch.createCompositeKoMatch(this, false, true);
+		C_KOMatch c_af1 = C_KOMatch.createCompositeKoMatch(this, false, false);
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
@@ -72,7 +80,23 @@ public class C_KOPhase extends Composite {
 		C_KOMatch c_af5 = C_KOMatch.createCompositeKoMatch(this, false, false);
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
+
+		btnAgain = new Button(this, SWT.CENTER);
+		btnAgain.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
+		btnAgain.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				System.err.println("Again, ok ...");
+				C_KOPhase.this.getShell().close();
+				SoccerApplication.main(new String[0]);
+			}
+		});
+		GridData gd_btnAgain = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+		gd_btnAgain.widthHint = 100;
+		btnAgain.setLayoutData(gd_btnAgain);
+		btnAgain.setText("Nochmal!");
+		btnAgain.setVisible(false);
+
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
 		
@@ -105,9 +129,9 @@ public class C_KOPhase extends Composite {
 		composite.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, false, false, 1, 1));
 		composite.setLayout(new GridLayout(3, false));
 		
-		lbl_finale_t1 = new Label(composite, SWT.CENTER);
+		lbl_finale_t1 = new CLabel(composite, SWT.CENTER);
 		GridData gd_lbl_finale_t1 = new GridData(SWT.CENTER, SWT.CENTER, false, true, 1, 1);
-		gd_lbl_finale_t1.widthHint = 70;
+		gd_lbl_finale_t1.widthHint = 150;
 		lbl_finale_t1.setLayoutData(gd_lbl_finale_t1);
 		lbl_finale_t1.setText("Team 1");
 		lbl_finale_t1.setVisible(false);
@@ -117,9 +141,10 @@ public class C_KOPhase extends Composite {
 		final_result.setText("4:1");
 		final_result.setVisible(false);
 		
-		lbl_finale_t2 = new Label(composite, SWT.CENTER);
+		lbl_finale_t2 = new CLabel(composite, SWT.RIGHT_TO_LEFT);
+		lbl_finale_t2.setAlignment(SWT.CENTER);
 		GridData gd_lbl_finale_t2 = new GridData(SWT.CENTER, SWT.CENTER, false, true, 1, 1);
-		gd_lbl_finale_t2.widthHint = 70;
+		gd_lbl_finale_t2.widthHint = 150;
 		lbl_finale_t2.setLayoutData(gd_lbl_finale_t2);
 		lbl_finale_t2.setText("Team 2");
 		lbl_finale_t2.setVisible(false);
@@ -130,16 +155,19 @@ public class C_KOPhase extends Composite {
 	public void showFinale(Match match) {
 		
 		lbl_finale_t1.setText(match.getHomeTeam().toString());
+		lbl_finale_t1.setImage(match.getHomeTeam().getFlag());
 		lbl_finale_t2.setText(match.getGuestTeam().toString());
+		lbl_finale_t2.setImage(match.getGuestTeam().getFlag());
 		final_result.setText(match.getHomeScore() + ":" + match.getGuestScore());
 		
-		int colorId = SWT.COLOR_RED;
-		Label winner = match.getWinner().equals(match.getHomeTeam()) ? lbl_finale_t1 : lbl_finale_t2;
+		int colorId = SWT.COLOR_DARK_GREEN;
+		CLabel winner = match.getWinner().equals(match.getHomeTeam()) ? lbl_finale_t1 : lbl_finale_t2;
 		winner.setForeground(Display.getCurrent().getSystemColor(colorId));
+//		winner.setFont(SWTResourceManager.getFont("Segoe Script", 11, SWT.NORMAL));
 		
 		for (Control c : finale.getChildren())
 			c.setVisible(true);
-		
+		btnAgain.setVisible(true);
 		layout();
 	}
 }

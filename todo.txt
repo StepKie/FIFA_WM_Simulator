@@ -1,4 +1,5 @@
-- Flags
+- Flags (remaining)
+- Internationalization .. :-D
 - Update next round when pairing is clear immediately (greyed out for 1/8 final when not sure)
 
 - Fix TODOs
@@ -9,3 +10,5 @@
 DONE
 
 - Show "n.V.", (n.E.)
+- Reset button
+- Flags (for majority of countries)

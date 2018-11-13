@@ -13,6 +13,7 @@ import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 import socsim.stable.Group;
 import socsim.stable.KORound;
@@ -20,6 +21,7 @@ import socsim.stable.Match;
 
 public class FussballWM {
 	
+	private static final String APPLICATION_ICON = "/FIFA-World-Cup-2018.png";
 	protected Shell shlFussballWm;
 	List<Group> gruppen;
 	
@@ -55,23 +57,40 @@ public class FussballWM {
 	 */
 	protected void createContents() {
 		shlFussballWm = new Shell();
-		shlFussballWm.setSize(850, 1100);
+		shlFussballWm.setSize(1700, 400);
+		shlFussballWm.setImage(SWTResourceManager.getImage(this.getClass(), APPLICATION_ICON));
 		shlFussballWm.setText("Fussball WM");
 		
 		RowLayout rl_shlFussballWm = new RowLayout(SWT.HORIZONTAL);
+		rl_shlFussballWm.fill = true;
+		rl_shlFussballWm.justify = true;
+		rl_shlFussballWm.center = true;
 		shlFussballWm.setLayout(rl_shlFussballWm);
 		
 		for (Group gruppe : gruppen) {
 			C_Gruppe gruppenComp = GruppenFactory.createWMGruppe(shlFussballWm, gruppe);
 			gruppenComps.add(gruppenComp);
-			gruppenComp.setLayoutData(new RowData(180, 280));
+			gruppenComp.setLayoutData(new RowData(200, 350));
 		}
 		
 		koPhase = new C_KOPhase(shlFussballWm, SWT.BORDER);
+		koPhase.setVisible(false);
+		koPhase.setLayoutData(new RowData(1400, SWT.DEFAULT));
 		koSpiele = koPhase.getMatches().iterator();
 		shlFussballWm.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+				// TODO Make this for all phases, without duplicated code etc
+				if (e.character == SWT.ESC) {
+					while (revealed < 32) {
+						int gruppe = revealed % 8;
+						int index = revealed / 8;
+						gruppenComps.get(gruppe).reveal(index);
+
+						revealed++;
+					}
+					return;
+				}
 				if (revealed < 32) {
 					int gruppe = revealed % 8;
 					int index = revealed / 8;
@@ -94,6 +113,9 @@ public class FussballWM {
 			gruppenComps.forEach(cgruppe -> cgruppe.refresh(vorrunde_Next));
 		} else {
 			if (koRunde == null) {
+				shlFussballWm.setSize(1700, 1100);
+				koPhase.setVisible(true);
+
 				Instant date = new GregorianCalendar(2012, 6, 30, 16, 0).toInstant();
 				koRunde = new KORound(KORound.getAF(gruppen), date);
 			} else if (koRunde.isFinished()) {

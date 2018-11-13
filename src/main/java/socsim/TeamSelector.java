@@ -56,16 +56,12 @@ public class TeamSelector {
 			CSVParser parser = CSVParser.parse(ClassLoader.getSystemResource(countryCodes).openStream(),
 					Charset.defaultCharset(), CSVFormat.EXCEL.withFirstRecordAsHeader());
 			
-			Optional<CSVRecord> code3Line = parser.getRecords().stream()
-					.filter(r -> r.get("Alpha-3").equalsIgnoreCase(code3)).findFirst();
-			if (code3Line.isPresent()) {
-				String code2 = code3Line.get().get("Alpha-2");
-				System.out.println("Found country code: " + code3 + " to " + code2);
-				return SWTResourceManager.getImage("/flags-iso/shiny/24" + code2 + ".png");
-			} else {
-				System.out.println("No entry for " + code3);
+			Optional<CSVRecord> code3Line = parser.getRecords().stream().filter(r -> r.get("Alpha-3").equalsIgnoreCase(code3)).findFirst();
+			if (!code3Line.isPresent()) {
+				log.warn("No flag found for " + code3);
 			}
-			
+			String code2 = code3Line.isPresent() ? code3Line.get().get("Alpha-2") : "_unknown";
+			return SWTResourceManager.getImage(TeamSelector.class, "/flags-iso/shiny/24/" + code2 + ".png");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
