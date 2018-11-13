@@ -21,8 +21,9 @@ import socsim.stable.Team;
 @Slf4j
 public class TeamSelector {
 	
-	public static final Image UNKNOWN_FLAG = SWTResourceManager.getImage(TeamSelector.class, "/flags-iso/shiny/24/_unknown.png");
-	public static final String ranking_file = "fifa_ranking_small.csv";
+	public static final Image UNKNOWN_FLAG = SWTResourceManager.getImage(TeamSelector.class,
+			"/flags-iso/shiny/24/_unknown.png");
+	public static final String ranking_file = "fifa_elo_new.csv";
 	private Collection<? extends Team> allTeams;
 	
 	public TeamSelector(Collection<Team> teams) {
@@ -37,7 +38,7 @@ public class TeamSelector {
 			CSVParser parser = CSVParser.parse(ClassLoader.getSystemResource(ranking_file).openStream(),
 					Charset.defaultCharset(), CSVFormat.EXCEL.withDelimiter(';').withFirstRecordAsHeader());
 			for (CSVRecord csvRecord : parser.getRecords()) {
-				int elo = (int) Math.round(Double.parseDouble(csvRecord.get("total_points")));
+				int elo = (int) Math.round(Double.parseDouble(csvRecord.get("elo_new")));
 				Confederation confed = Confederation.fromString(csvRecord.get("confederation"));
 				String code2 = csvRecord.get("country_code_2");
 				Image flag = SWTResourceManager.getImage(TeamSelector.class, "/flags-iso/shiny/24/" + code2 + ".png");
@@ -48,6 +49,22 @@ public class TeamSelector {
 			e.printStackTrace();
 		}
 		return teams;
+	}
+	
+	public static Image getLargeFlag(Team t) {
+		try {
+			@Cleanup
+			CSVParser parser = CSVParser.parse(ClassLoader.getSystemResource(ranking_file).openStream(),
+					Charset.defaultCharset(), CSVFormat.EXCEL.withDelimiter(';').withFirstRecordAsHeader());
+			CSVRecord csvRecord = parser.getRecords().stream().filter(r -> t.getId().equals(r.get("country_code_3")))
+					.findFirst().orElse(null);
+			String code2 = csvRecord.get("country_code_2");
+			return SWTResourceManager.getImage(TeamSelector.class, "/flags-iso/shiny/64/" + code2 + ".png");
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public Collection<Team> getParticipants() {

@@ -18,6 +18,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import lombok.Getter;
 import socsim.SoccerApplication;
+import socsim.TeamSelector;
 import socsim.stable.Match;
 
 public class C_KOPhase extends Composite {
@@ -28,7 +29,7 @@ public class C_KOPhase extends Composite {
 	private CLabel lbl_finale_t2;
 	private Label final_result;
 	private CLabel lbl_finale_t1;
-
+	
 	private Button btnAgain;
 	
 	/**
@@ -41,46 +42,29 @@ public class C_KOPhase extends Composite {
 		super(parent, style);
 		setLayout(new GridLayout(7, false));
 		
-		C_KOMatch c_af1 = C_KOMatch.createCompositeKoMatch(this, false, false);
+		C_KOMatch c_af1 = C_KOMatch.createCompositeKoMatch(this, false, false, 1);
+		C_KOMatch c_vf1 = C_KOMatch.createCompositeKoMatch(this, false, false, 2);
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
+		C_KOMatch c_vf3 = C_KOMatch.createCompositeKoMatch(this, true, false, 2);
+		C_KOMatch c_af3 = C_KOMatch.createCompositeKoMatch(this, true, false, 1);
 		
-		C_KOMatch c_af3 = C_KOMatch.createCompositeKoMatch(this, true, false);
-		new Label(this, SWT.NONE);
-		
-		C_KOMatch c_vf1 = C_KOMatch.createCompositeKoMatch(this, false, false);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		
-		C_KOMatch c_vf3 = C_KOMatch.createCompositeKoMatch(this, true, false);
-		new Label(this, SWT.NONE);
-		C_KOMatch c_af2 = C_KOMatch.createCompositeKoMatch(this, false, false);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		
-		C_KOMatch c_af4 = C_KOMatch.createCompositeKoMatch(this, true, false);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		
-		C_KOMatch c_hf1 = C_KOMatch.createCompositeKoMatch(this, false, false);
-		
+		C_KOMatch c_af2 = C_KOMatch.createCompositeKoMatch(this, false, false, 1);
+		C_KOMatch c_hf1 = C_KOMatch.createCompositeKoMatch(this, false, false, 2);
 		finale = createFinaleComp();
+		C_KOMatch c_hf2 = C_KOMatch.createCompositeKoMatch(this, true, false, 2);
+		C_KOMatch c_af4 = C_KOMatch.createCompositeKoMatch(this, true, false, 1);
 		
-		C_KOMatch c_hf2 = C_KOMatch.createCompositeKoMatch(this, true, false);
-		new Label(this, SWT.NONE);
+		C_KOMatch c_af5 = C_KOMatch.createCompositeKoMatch(this, false, false, 1);
+		C_KOMatch c_vf2 = C_KOMatch.createCompositeKoMatch(this, false, false, 2);
+		
+		C_KOMatch c_vf4 = C_KOMatch.createCompositeKoMatch(this, true, false, 2);
+		C_KOMatch c_af7 = C_KOMatch.createCompositeKoMatch(this, true, false, 1);
+		
+		C_KOMatch c_af6 = C_KOMatch.createCompositeKoMatch(this, false, false, 1);
 		new Label(this, SWT.NONE);
 		
-		C_KOMatch c_af5 = C_KOMatch.createCompositeKoMatch(this, false, false);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-
 		btnAgain = new Button(this, SWT.CENTER);
 		btnAgain.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.BOLD));
 		btnAgain.addSelectionListener(new SelectionAdapter() {
@@ -91,34 +75,15 @@ public class C_KOPhase extends Composite {
 				SoccerApplication.main(new String[0]);
 			}
 		});
-		GridData gd_btnAgain = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+		GridData gd_btnAgain = new GridData(SWT.CENTER, SWT.TOP, false, false, 1, 1);
 		gd_btnAgain.widthHint = 100;
 		btnAgain.setLayoutData(gd_btnAgain);
 		btnAgain.setText("Nochmal!");
 		btnAgain.setVisible(false);
-
-		new Label(this, SWT.NONE);
+		
 		new Label(this, SWT.NONE);
 		
-		C_KOMatch c_af7 = C_KOMatch.createCompositeKoMatch(this, true, false);
-		new Label(this, SWT.NONE);
-		
-		C_KOMatch c_vf2 = C_KOMatch.createCompositeKoMatch(this, false, false);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		
-		C_KOMatch c_vf4 = C_KOMatch.createCompositeKoMatch(this, true, false);
-		new Label(this, SWT.NONE);
-		
-		C_KOMatch c_af6 = C_KOMatch.createCompositeKoMatch(this, false, false);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		
-		C_KOMatch c_af8 = C_KOMatch.createCompositeKoMatch(this, true, false);
+		C_KOMatch c_af8 = C_KOMatch.createCompositeKoMatch(this, true, false, 1);
 		
 		matches = Arrays.asList(c_af1, c_af2, c_af3, c_af4, c_af5, c_af6, c_af7, c_af8, c_vf1, c_vf2, c_vf3, c_vf4,
 				c_hf1, c_hf2);
@@ -126,7 +91,7 @@ public class C_KOPhase extends Composite {
 	
 	private Composite createFinaleComp() {
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, false, false, 1, 1));
+		composite.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 2));
 		composite.setLayout(new GridLayout(3, false));
 		
 		lbl_finale_t1 = new CLabel(composite, SWT.CENTER);
@@ -164,6 +129,9 @@ public class C_KOPhase extends Composite {
 		CLabel winner = match.getWinner().equals(match.getHomeTeam()) ? lbl_finale_t1 : lbl_finale_t2;
 		winner.setForeground(Display.getCurrent().getSystemColor(colorId));
 		winner.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
+		
+		winner.setImage(TeamSelector.getLargeFlag(match.getWinner()));
+		winner.layout();
 		
 		for (Control c : finale.getChildren())
 			c.setVisible(true);

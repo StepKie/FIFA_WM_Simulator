@@ -15,35 +15,38 @@ import socsim.stable.Match;
 import socsim.stable.Table.Row;
 
 public class C_Gruppe extends Composite {
-
+	
 	public class C_Row extends Composite {
 		Label position;
 		CLabel teamName;
 		Label teamPoints;
 		Label teamGoals;
-
+		
 		public C_Row(Composite parent, int style) {
 			super(parent, style);
 			setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
-			setLayout(new GridLayout(4, false));
-
+			GridLayout lo = new GridLayout(4, false);
+			lo.verticalSpacing = 0;
+			lo.marginHeight = 0;
+			lo.marginWidth = 0;
+			setLayout(lo);
+			
 			position = new Label(this, SWT.NONE);
 			teamName = new CLabel(this, SWT.NONE);
 			teamName.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 			teamPoints = new Label(this, SWT.NONE);
 			teamGoals = new Label(this, SWT.NONE);
 		}
-
-
+		
 	}
-
+	
 	/**
 	 * @wbp.factory
 	 */
 	public static C_Gruppe.C_Row createRow(Composite parent, int style) {
 		return new C_Gruppe(parent, style).new C_Row(parent, style);
 	}
-
+	
 	private Group gruppe;
 	
 	C_Row[] teams = new C_Row[4];
@@ -66,7 +69,6 @@ public class C_Gruppe extends Composite {
 		setLayout(new GridLayout(2, true));
 		setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
 		
-
 		Label lblGruppenname = new Label(this, SWT.CENTER);
 		lblGruppenname.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 4, 1));
 		lblGruppenname.setText(gruppe.getName());
@@ -83,7 +85,6 @@ public class C_Gruppe extends Composite {
 		setInvisible();
 	}
 	
-	
 	private void emptyRow(boolean showLine) {
 		Label label = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
 		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1));
@@ -99,7 +100,7 @@ public class C_Gruppe extends Composite {
 			pairing[i].setText(text);
 			pairing[i].setData(m);
 			pairing[i].setVisible(false);
-
+			
 			result[i] = new Label(this, SWT.NONE);
 			result[i].setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
 			result[i].setText("-:-");
@@ -116,7 +117,7 @@ public class C_Gruppe extends Composite {
 				tName = tName.substring(0, 15).concat(".");
 			teams[i].teamName.setText(tName);
 			teams[i].teamName.setImage(r.getTeam().getFlag());
-			teams[i].teamName.setToolTipText(r.getTeam().toString() + "\n Stärke: " + r.getTeam().getElo());
+			teams[i].teamName.setToolTipText(r.getTeam().getTooltip());
 			teams[i].teamPoints.setText(Integer.toString(r.getPoints()));
 			teams[i].teamGoals.setText(r.getGoalsFor() + ":" + r.getGoalsAgainst());
 		}
@@ -129,17 +130,17 @@ public class C_Gruppe extends Composite {
 			
 		}
 		
-		if (played != null) {
-			for (Label matchLabel : pairing) {
-				int colorId = matchLabel.getData().equals(played) ? SWT.COLOR_RED : SWT.COLOR_WIDGET_FOREGROUND;
-				matchLabel.setForeground(Display.getCurrent().getSystemColor(colorId));
-				
-			}
+		for (Label matchLabel : pairing) {
+			int colorId = matchLabel.getData().equals(played) ? SWT.COLOR_RED : SWT.COLOR_WIDGET_FOREGROUND;
+			matchLabel.setForeground(Display.getCurrent().getSystemColor(colorId));
+			
 		}
+		
 		// Layout (for example after reappearing position etc.
 		Stream.of(teams).forEach(C_Row::layout);
 		// Without this call to layout, labels are not refreshed correctly
 		layout();
+		pack(false);
 	}
 	
 	private void setInvisible() {
@@ -161,10 +162,13 @@ public class C_Gruppe extends Composite {
 				row.teamPoints.setVisible(true);
 				row.position.setVisible(true);
 			}
-
+			
 			Stream.of(pairing).forEach(l -> l.setVisible(true));
 			Stream.of(result).forEach(l -> l.setVisible(true));
 		}
+		
 		Stream.of(teams).forEach(C_Row::layout);
+		layout();
+		pack(false);
 	}
 }

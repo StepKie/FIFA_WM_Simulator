@@ -70,7 +70,7 @@ public class FussballWM {
 		for (Group gruppe : gruppen) {
 			C_Gruppe gruppenComp = GruppenFactory.createWMGruppe(shlFussballWm, gruppe);
 			gruppenComps.add(gruppenComp);
-			gruppenComp.setLayoutData(new RowData(200, 350));
+			gruppenComp.setLayoutData(new RowData(SWT.DEFAULT, SWT.DEFAULT));
 		}
 		
 		koPhase = new C_KOPhase(shlFussballWm, SWT.NONE);
@@ -86,9 +86,10 @@ public class FussballWM {
 						int gruppe = revealed % 8;
 						int index = revealed / 8;
 						gruppenComps.get(gruppe).reveal(index);
-
+						
 						revealed++;
 					}
+					gruppenComps.forEach(cgruppe -> cgruppe.refresh(null));
 					return;
 				}
 				if (revealed < 32) {
@@ -112,10 +113,11 @@ public class FussballWM {
 			vorrunde_Next.play();
 			gruppenComps.forEach(cgruppe -> cgruppe.refresh(vorrunde_Next));
 		} else {
+			gruppenComps.forEach(cgruppe -> cgruppe.refresh(null));
 			if (koRunde == null) {
-				shlFussballWm.setSize(1700, 1100);
+				shlFussballWm.setSize(1700, 800);
 				koPhase.setVisible(true);
-
+				
 				Instant date = new GregorianCalendar(2012, 6, 30, 16, 0).toInstant();
 				koRunde = new KORound(KORound.getAF(gruppen), date);
 			} else if (koRunde.isFinished()) {

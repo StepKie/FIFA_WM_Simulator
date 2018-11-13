@@ -52,4 +52,8 @@ public class Team implements Comparable<Team> {
 	String getName() {
 		return name;
 	}
+	
+	public String getTooltip() {
+		return toString() + "\nStärke: " + getElo();
+	}
 }

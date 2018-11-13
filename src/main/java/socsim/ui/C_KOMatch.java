@@ -19,7 +19,7 @@ public class C_KOMatch extends Composite {
 	private Label lblNv;
 	
 	public C_KOMatch(Composite parent, int style) {
-		this(parent, style, false, true);
+		this(parent, style, false, true, 1);
 	}
 	
 	/**
@@ -28,13 +28,13 @@ public class C_KOMatch extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public C_KOMatch(Composite parent, int style, boolean reversed, boolean initialVisible) {
+	public C_KOMatch(Composite parent, int style, boolean reversed, boolean initialVisible, int vertSpan) {
 		super(parent, style);
 		
 		setLayout(new GridLayout(3, false));
-		GridData gd_composite_komatch = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		GridData gd_composite_komatch = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, vertSpan);
 		gd_composite_komatch.heightHint = 80;
-		gd_composite_komatch.widthHint = 100;
+		gd_composite_komatch.widthHint = 150;
 		setLayoutData(gd_composite_komatch);
 		
 		label_team1 = new CLabel(this, reversed ? SWT.RIGHT_TO_LEFT : SWT.NONE);
@@ -65,8 +65,6 @@ public class C_KOMatch extends Composite {
 		label_score1.setVisible(initialVisible);
 		label_score2.setVisible(initialVisible);
 		
-		
-
 		if (reversed) {
 			label_score1.moveAbove(label_team1);
 			label_team1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
@@ -80,15 +78,20 @@ public class C_KOMatch extends Composite {
 	/**
 	 * @wbp.factory
 	 */
-	public static C_KOMatch createCompositeKoMatch(Composite parent, boolean reversed, boolean initialVisible) {
-		return new C_KOMatch(parent, SWT.BORDER, reversed, initialVisible);
+	public static C_KOMatch createCompositeKoMatch(Composite parent, boolean reversed, boolean initialVisible,
+			int vertSpan) {
+		return new C_KOMatch(parent, SWT.BORDER, reversed, initialVisible, vertSpan);
 	}
 	
 	public void updateMatch(Match m) {
 		label_team1.setText(m.getHomeTeam().toString());
 		label_team1.setImage(m.getHomeTeam().getFlag());
+		label_team1.setToolTipText(m.getHomeTeam().getTooltip());
+		
 		label_team2.setText(m.getGuestTeam().toString());
 		label_team2.setImage(m.getGuestTeam().getFlag());
+		label_team2.setToolTipText(m.getGuestTeam().getTooltip());
+		
 		label_score1.setText(Integer.toString(m.getHomeScore()));
 		label_score2.setText(Integer.toString(m.getGuestScore()));
 		

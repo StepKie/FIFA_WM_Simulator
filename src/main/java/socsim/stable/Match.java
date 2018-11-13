@@ -50,7 +50,7 @@ public class Match implements Comparable<Match> {
 		// 400)));
 		
 		double expectedScoreElo = 1
-				/ (1 + (Math.pow(10, ((double) homeTeam.getElo() - (double) guestTeam.getElo()) / 2000)));
+				/ (1 + (Math.pow(10, ((double) homeTeam.getElo() - (double) guestTeam.getElo()) / 400)));
 		
 		homeScore = 0;
 		guestScore = 0;
