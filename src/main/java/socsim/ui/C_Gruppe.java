@@ -112,11 +112,11 @@ public class C_Gruppe extends Composite {
 		for (int i = 0; i <= 3; i++) {
 			Row r = gruppe.getTable().getRows().get(i);
 			String tName = r.getTeam().toString();
-			if (tName.length() > 20)
-				tName = tName.substring(0, 20).concat(".");
+			if (tName.length() > 15)
+				tName = tName.substring(0, 15).concat(".");
 			teams[i].teamName.setText(tName);
 			teams[i].teamName.setImage(r.getTeam().getFlag());
-			teams[i].teamName.setToolTipText(r.getTeam().toString() + "\n Stärke:" + r.getTeam().getElo());
+			teams[i].teamName.setToolTipText(r.getTeam().toString() + "\n Stärke: " + r.getTeam().getElo());
 			teams[i].teamPoints.setText(Integer.toString(r.getPoints()));
 			teams[i].teamGoals.setText(r.getGoalsFor() + ":" + r.getGoalsAgainst());
 		}

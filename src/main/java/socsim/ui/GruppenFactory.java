@@ -1,7 +1,6 @@
 package socsim.ui;
 
 import static java.time.temporal.ChronoUnit.DAYS;
-import static java.time.temporal.ChronoUnit.HOURS;
 
 import java.time.Instant;
 import java.util.GregorianCalendar;
@@ -37,16 +36,9 @@ public final class GruppenFactory {
 	 */
 	public static Group create_WM_Group(int id, List<Team> teams) {
 		log.info("Creating Group {}", id);
-		Group group = new Group(getName(id), Ranking.EURO_2012.comparator);
-		teams.forEach(group::addTeam);
-		// TODO Logic here
+		Group group = new Group(getName(id), Ranking.EURO_2012.comparator, teams);
 		Instant offset = WM_START.plus(id, DAYS);
-		group.addMatch(new Match(offset, teams.get(0), teams.get(1), false));
-		group.addMatch(new Match(offset.plus(4, HOURS), teams.get(2), teams.get(3), false));
-		group.addMatch(new Match(offset.plus(8, DAYS), teams.get(0), teams.get(2), false));
-		group.addMatch(new Match(offset.plus(8, DAYS).plus(4, HOURS), teams.get(1), teams.get(3), false));
-		group.addMatch(new Match(offset.plus(16, DAYS), teams.get(0), teams.get(3), false));
-		group.addMatch(new Match(offset.plus(16, DAYS).plus(4, HOURS), teams.get(1), teams.get(2), false));
+		group.createSchedule(offset);
 		
 		return group;
 	}

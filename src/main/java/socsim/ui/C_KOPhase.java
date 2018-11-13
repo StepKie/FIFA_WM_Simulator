@@ -125,7 +125,7 @@ public class C_KOPhase extends Composite {
 	}
 	
 	private Composite createFinaleComp() {
-		Composite composite = new Composite(this, SWT.BORDER);
+		Composite composite = new Composite(this, SWT.NONE);
 		composite.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, false, false, 1, 1));
 		composite.setLayout(new GridLayout(3, false));
 		

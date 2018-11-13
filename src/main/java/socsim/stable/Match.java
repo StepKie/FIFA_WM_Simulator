@@ -39,7 +39,6 @@ public class Match implements Comparable<Match> {
 	
 	public void play() {
 		
-		// TODO Adjust for team elos
 		int eloDiff = homeTeam.getElo() - guestTeam.getElo();
 		double eloScaleFactor = 0.001 * eloDiff;
 		

@@ -73,7 +73,7 @@ public class FussballWM {
 			gruppenComp.setLayoutData(new RowData(200, 350));
 		}
 		
-		koPhase = new C_KOPhase(shlFussballWm, SWT.BORDER);
+		koPhase = new C_KOPhase(shlFussballWm, SWT.NONE);
 		koPhase.setVisible(false);
 		koPhase.setLayoutData(new RowData(1400, SWT.DEFAULT));
 		koSpiele = koPhase.getMatches().iterator();

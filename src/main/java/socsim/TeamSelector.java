@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.csv.CSVFormat;
@@ -22,8 +21,8 @@ import socsim.stable.Team;
 @Slf4j
 public class TeamSelector {
 	
+	public static final Image UNKNOWN_FLAG = SWTResourceManager.getImage(TeamSelector.class, "/flags-iso/shiny/24/_unknown.png");
 	public static final String ranking_file = "fifa_ranking_small.csv";
-	public static final String countryCodes = "country_codes.csv";
 	private Collection<? extends Team> allTeams;
 	
 	public TeamSelector(Collection<Team> teams) {
@@ -36,37 +35,19 @@ public class TeamSelector {
 		try {
 			@Cleanup
 			CSVParser parser = CSVParser.parse(ClassLoader.getSystemResource(ranking_file).openStream(),
-					Charset.defaultCharset(), CSVFormat.EXCEL.withFirstRecordAsHeader());
+					Charset.defaultCharset(), CSVFormat.EXCEL.withDelimiter(';').withFirstRecordAsHeader());
 			for (CSVRecord csvRecord : parser.getRecords()) {
 				int elo = (int) Math.round(Double.parseDouble(csvRecord.get("total_points")));
 				Confederation confed = Confederation.fromString(csvRecord.get("confederation"));
-				Image flag = findFlag(csvRecord.get("country_abrv"));
-				teams.add(new Team(csvRecord.get("country_abrv"), csvRecord.get("country_full"), elo, confed, flag));
+				String code2 = csvRecord.get("country_code_2");
+				Image flag = SWTResourceManager.getImage(TeamSelector.class, "/flags-iso/shiny/24/" + code2 + ".png");
+				teams.add(new Team(csvRecord.get("country_code_3"), csvRecord.get("country_full"), elo, confed, flag));
 				
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return teams;
-	}
-	
-	private static Image findFlag(String code3) {
-		try {
-			@Cleanup
-			CSVParser parser = CSVParser.parse(ClassLoader.getSystemResource(countryCodes).openStream(),
-					Charset.defaultCharset(), CSVFormat.EXCEL.withFirstRecordAsHeader());
-			
-			Optional<CSVRecord> code3Line = parser.getRecords().stream().filter(r -> r.get("Alpha-3").equalsIgnoreCase(code3)).findFirst();
-			if (!code3Line.isPresent()) {
-				log.warn("No flag found for " + code3);
-			}
-			String code2 = code3Line.isPresent() ? code3Line.get().get("Alpha-2") : "_unknown";
-			return SWTResourceManager.getImage(TeamSelector.class, "/flags-iso/shiny/24/" + code2 + ".png");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return null;
 	}
 	
 	public Collection<Team> getParticipants() {

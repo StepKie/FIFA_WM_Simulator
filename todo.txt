@@ -4,7 +4,6 @@
 
 - Fix TODOs
 - Allow fine-tuning of progress (individual goals <--> skip over entire phases)
-- Reset button
 - Beautification (Alignment, etc. pp.)
 
 DONE
