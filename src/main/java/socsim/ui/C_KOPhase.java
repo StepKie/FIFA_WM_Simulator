@@ -17,9 +17,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import lombok.Getter;
+import socsim.Match;
 import socsim.SoccerApplication;
 import socsim.io.Fussball_IO;
-import socsim.stable.Match;
 
 public class C_KOPhase extends Composite {
 	

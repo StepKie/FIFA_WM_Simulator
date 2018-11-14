@@ -7,7 +7,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import socsim.stable.Match;
+import socsim.Match;
 
 public class C_KOMatch extends Composite {
 	

@@ -6,28 +6,17 @@ import java.time.Instant;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-
 import lombok.extern.slf4j.Slf4j;
 import socsim.Confederation;
-import socsim.stable.Group;
-import socsim.stable.Match;
-import socsim.stable.Team;
-import socsim.stable.ranking.Ranking;
+import socsim.Group;
+import socsim.Match;
+import socsim.Table;
+import socsim.Team;
 
 @Slf4j
 public final class GruppenFactory {
 	
 	public static final Instant WM_START = new GregorianCalendar(2012, 6, 8, 18, 0).toInstant();
-	
-	/**
-	 * @wbp.factory
-	 */
-	public static C_Gruppe createWMGruppe(Composite parent, Group grp) {
-		C_Gruppe gruppe = new C_Gruppe(parent, SWT.BORDER, grp);
-		return gruppe;
-	}
 	
 	/**
 	 * @param id    Group id
@@ -36,7 +25,7 @@ public final class GruppenFactory {
 	 */
 	public static Group create_WM_Group(int id, List<Team> teams) {
 		log.info("Creating Group {}", id);
-		Group group = new Group(getName(id), Ranking.EURO_2012.comparator, teams);
+		Group group = new Group(getName(id), Table.WM_2018, teams);
 		Instant offset = WM_START.plus(id, DAYS);
 		group.createSchedule(offset);
 		
@@ -52,7 +41,7 @@ public final class GruppenFactory {
 	}
 	
 	public static final Group getTestGroup() {
-		Group group = new Group("T", Ranking.EURO_2012.comparator);
+		Group group = new Group("T", Table.WM_2018);
 		group.addTeam(new Team("CZE", "Tschechien", 1200, Confederation.UEFA, null));
 		group.addTeam(new Team("GRE", "Griechenland", 1000, Confederation.UEFA, null));
 		group.addTeam(new Team("POL", "Polen", 1000, Confederation.UEFA, null));

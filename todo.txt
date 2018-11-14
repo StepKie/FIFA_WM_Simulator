@@ -1,13 +1,12 @@
-- Flags (remaining)
 - Internationalization .. :-D
 - Update next round when pairing is clear immediately (greyed out for 1/8 final when not sure)
-
+- Improve elo-based simulation model which is very simplistic (regular pairings, as well as extra time, penalties ...)
 - Fix TODOs
 - Allow fine-tuning of progress (individual goals <--> skip over entire phases)
-- Beautification (Alignment, etc. pp.)
+- session-spanning stats, hence persistence (?!)
 
 DONE
 
 - Show "n.V.", (n.E.)
 - Reset button
-- Flags (for majority of countries)
+- Flags

@@ -10,8 +10,6 @@ import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import socsim.stable.Group;
-import socsim.stable.Team;
 import socsim.ui.GruppenFactory;
 
 /**

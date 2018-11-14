@@ -15,9 +15,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import socsim.stable.Group;
-import socsim.stable.KORound;
-import socsim.stable.Match;
+import socsim.Group;
+import socsim.KORound;
+import socsim.Match;
 
 /**
  * Main UI hub
@@ -71,7 +71,7 @@ public class FussballWM {
 		shlFussballWm.setLayout(rl_shlFussballWm);
 		
 		for (Group gruppe : gruppen) {
-			C_Gruppe gruppenComp = GruppenFactory.createWMGruppe(shlFussballWm, gruppe);
+			C_Gruppe gruppenComp = C_Gruppe.createWMGruppe(shlFussballWm, gruppe);
 			gruppenComps.add(gruppenComp);
 			gruppenComp.setLayoutData(new RowData(SWT.DEFAULT, SWT.DEFAULT));
 		}

@@ -10,41 +10,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-import socsim.stable.Group;
-import socsim.stable.Match;
-import socsim.stable.Table.Row;
+import socsim.Group;
+import socsim.Match;
+import socsim.Table.Row;
 
 public class C_Gruppe extends Composite {
-	
-	public class C_Row extends Composite {
-		Label position;
-		CLabel teamName;
-		Label teamPoints;
-		Label teamGoals;
-		
-		public C_Row(Composite parent, int style) {
-			super(parent, style);
-			setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
-			GridLayout lo = new GridLayout(4, false);
-			lo.verticalSpacing = 0;
-			lo.marginHeight = 0;
-			lo.marginWidth = 0;
-			setLayout(lo);
-			
-			position = new Label(this, SWT.NONE);
-			teamName = new CLabel(this, SWT.NONE);
-			teamName.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-			teamPoints = new Label(this, SWT.NONE);
-			teamGoals = new Label(this, SWT.NONE);
-		}
-		
-	}
 	
 	/**
 	 * @wbp.factory
 	 */
-	public static C_Gruppe.C_Row createRow(Composite parent, int style) {
-		return new C_Gruppe(parent, style).new C_Row(parent, style);
+	public static C_Gruppe createWMGruppe(Composite parent, Group grp) {
+		C_Gruppe gruppe = new C_Gruppe(parent, SWT.BORDER, grp);
+		return gruppe;
 	}
 	
 	private Group gruppe;
@@ -74,6 +51,7 @@ public class C_Gruppe extends Composite {
 		lblGruppenname.setText(gruppe.getName());
 		
 		emptyRow(true);
+		
 		for (int i = 0; i <= 3; i++) {
 			teams[i] = new C_Row(this, SWT.NONE);
 		}
@@ -170,5 +148,35 @@ public class C_Gruppe extends Composite {
 		Stream.of(teams).forEach(C_Row::layout);
 		layout();
 		pack(false);
+	}
+	
+	public class C_Row extends Composite {
+		Label position;
+		CLabel teamName;
+		Label teamPoints;
+		Label teamGoals;
+		
+		public C_Row(Composite parent, int style) {
+			super(parent, style);
+			setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+			GridLayout lo = new GridLayout(4, false);
+			lo.verticalSpacing = 0;
+			lo.marginHeight = 0;
+			lo.marginWidth = 0;
+			setLayout(lo);
+			
+			position = new Label(this, SWT.NONE);
+			teamName = new CLabel(this, SWT.NONE);
+			teamName.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+			teamPoints = new Label(this, SWT.NONE);
+			teamGoals = new Label(this, SWT.NONE);
+		}
+	}
+	
+	/**
+	 * @wbp.factory
+	 */
+	public static C_Gruppe.C_Row createRow(Composite parent, int style) {
+		return new C_Gruppe(parent, style).new C_Row(parent, style);
 	}
 }

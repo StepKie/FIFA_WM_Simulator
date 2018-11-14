@@ -14,8 +14,8 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import socsim.Confederation;
+import socsim.Team;
 import socsim.TeamSelector;
-import socsim.stable.Team;
 
 /**
  * Reads teams, flags etc from file system
