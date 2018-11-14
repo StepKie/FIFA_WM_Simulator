@@ -76,10 +76,6 @@ public class FussballWM {
 			gruppenComp.setLayoutData(new RowData(SWT.DEFAULT, SWT.DEFAULT));
 		}
 		
-		koPhase = new C_KOPhase(shlFussballWm, SWT.NONE);
-		koPhase.setVisible(false);
-		koPhase.setLayoutData(new RowData(1400, SWT.DEFAULT));
-		koSpiele = koPhase.getMatches().iterator();
 		shlFussballWm.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -121,9 +117,14 @@ public class FussballWM {
 			gruppenComps.forEach(cgruppe -> cgruppe.refresh(vorrunde_Next));
 		} else {
 			gruppenComps.forEach(cgruppe -> cgruppe.refresh(null));
+			
 			if (koRunde == null) {
 				shlFussballWm.setSize(1700, 800);
+				koPhase = new C_KOPhase(shlFussballWm, SWT.NONE);
+				koPhase.setLayoutData(new RowData(1400, SWT.DEFAULT));
+				koSpiele = koPhase.getMatches().iterator();
 				koPhase.setVisible(true);
+				shlFussballWm.layout();
 				
 				Instant date = new GregorianCalendar(2012, 6, 30, 16, 0).toInstant();
 				koRunde = new KORound(KORound.getAF(gruppen), date);
