@@ -18,7 +18,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import lombok.Getter;
 import socsim.SoccerApplication;
-import socsim.TeamSelector;
+import socsim.io.Fussball_IO;
 import socsim.stable.Match;
 
 public class C_KOPhase extends Composite {
@@ -85,8 +85,7 @@ public class C_KOPhase extends Composite {
 		
 		C_KOMatch c_af8 = C_KOMatch.createCompositeKoMatch(this, true, false, 1);
 		
-		matches = Arrays.asList(c_af1, c_af2, c_af3, c_af4, c_af5, c_af6, c_af7, c_af8, c_vf1, c_vf2, c_vf3, c_vf4,
-				c_hf1, c_hf2);
+		matches = Arrays.asList(c_af1, c_af2, c_af3, c_af4, c_af5, c_af6, c_af7, c_af8, c_vf1, c_vf2, c_vf3, c_vf4, c_hf1, c_hf2);
 	}
 	
 	private Composite createFinaleComp() {
@@ -130,7 +129,7 @@ public class C_KOPhase extends Composite {
 		winner.setForeground(Display.getCurrent().getSystemColor(colorId));
 		winner.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
 		
-		winner.setImage(TeamSelector.getLargeFlag(match.getWinner()));
+		winner.setImage(Fussball_IO.getLargeFlag(match.getWinner()));
 		winner.layout();
 		
 		for (Control c : finale.getChildren())

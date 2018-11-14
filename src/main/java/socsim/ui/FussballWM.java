@@ -19,6 +19,9 @@ import socsim.stable.Group;
 import socsim.stable.KORound;
 import socsim.stable.Match;
 
+/**
+ * Main UI hub
+ */
 public class FussballWM {
 	
 	private static final String APPLICATION_ICON = "/FIFA-World-Cup-2018.png";
@@ -107,8 +110,12 @@ public class FussballWM {
 	}
 	
 	public void playNextGame() {
-		Match vorrunde_Next = gruppen.stream().flatMap(g -> g.getMatches().stream()).filter(m -> !m.isFinished())
-				.sorted().findFirst().orElse(null);
+		Match vorrunde_Next = gruppen.stream() //
+				.flatMap(g -> g.getMatches().stream()) //
+				.filter(m -> !m.isFinished()) //
+				.sorted() //
+				.findFirst().orElse(null);
+		
 		if (vorrunde_Next != null) {
 			vorrunde_Next.play();
 			gruppenComps.forEach(cgruppe -> cgruppe.refresh(vorrunde_Next));

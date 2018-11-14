@@ -30,7 +30,7 @@ public final class GruppenFactory {
 	}
 	
 	/**
-	 * @param id Group id
+	 * @param id    Group id
 	 * @param teams List in the order of the seeding
 	 * @return The group with matches set
 	 */

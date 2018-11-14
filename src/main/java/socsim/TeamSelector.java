@@ -1,74 +1,34 @@
 package socsim;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.wb.swt.SWTResourceManager;
-
-import lombok.Cleanup;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import socsim.stable.Group;
 import socsim.stable.Team;
+import socsim.ui.GruppenFactory;
 
+/**
+ * Selection routines (drawing, making groups etc.) for various scenarios
+ */
 @Slf4j
+@RequiredArgsConstructor
 public class TeamSelector {
 	
-	public static final Image UNKNOWN_FLAG = SWTResourceManager.getImage(TeamSelector.class,
-			"/flags-iso/shiny/24/_unknown.png");
-	public static final String ranking_file = "fifa_elo_new.csv";
-	private Collection<? extends Team> allTeams;
+	@NonNull private Collection<Team> allTeams;
 	
-	public TeamSelector(Collection<Team> teams) {
-		allTeams = teams;
-	}
-	
-	public static Collection<Team> parseTeams() {
-		Collection<Team> teams = new ArrayList<>();
-		
-		try {
-			@Cleanup
-			CSVParser parser = CSVParser.parse(ClassLoader.getSystemResource(ranking_file).openStream(),
-					Charset.defaultCharset(), CSVFormat.EXCEL.withDelimiter(';').withFirstRecordAsHeader());
-			for (CSVRecord csvRecord : parser.getRecords()) {
-				int elo = (int) Math.round(Double.parseDouble(csvRecord.get("elo_new")));
-				Confederation confed = Confederation.fromString(csvRecord.get("confederation"));
-				String code2 = csvRecord.get("country_code_2");
-				Image flag = SWTResourceManager.getImage(TeamSelector.class, "/flags-iso/shiny/24/" + code2 + ".png");
-				teams.add(new Team(csvRecord.get("country_code_3"), csvRecord.get("country_full"), elo, confed, flag));
-				
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return teams;
-	}
-	
-	public static Image getLargeFlag(Team t) {
-		try {
-			@Cleanup
-			CSVParser parser = CSVParser.parse(ClassLoader.getSystemResource(ranking_file).openStream(),
-					Charset.defaultCharset(), CSVFormat.EXCEL.withDelimiter(';').withFirstRecordAsHeader());
-			CSVRecord csvRecord = parser.getRecords().stream().filter(r -> t.getId().equals(r.get("country_code_3")))
-					.findFirst().orElse(null);
-			String code2 = csvRecord.get("country_code_2");
-			return SWTResourceManager.getImage(TeamSelector.class, "/flags-iso/shiny/64/" + code2 + ".png");
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+	public List<Group> getGroups() {
+		return draw(allTeams);
 	}
 	
 	public Collection<Team> getParticipants() {
-		List<Team> participants = new ArrayList<>();
+		var participants = new ArrayList<Team>();
 		for (Confederation cf : Confederation.values()) {
 			participants.addAll(getParticipantsFrom(cf));
 		}
@@ -101,4 +61,46 @@ public class TeamSelector {
 		
 		return drawn;
 	}
+	
+	private static List<Group> draw(Collection<Team> participants) {
+		var num_groups = 8;
+		var teamsInGrp = 4;
+		List<Team> teamsSorted = participants.stream().sorted(Comparator.comparingInt(Team::getElo).reversed()).collect(Collectors.toList());
+		List<Team>[] topf = new List[teamsInGrp];
+		for (int i = 0; i < teamsInGrp; i++) {
+			topf[i] = teamsSorted.subList(i * num_groups, i * num_groups + 8);
+			Collections.shuffle(topf[i]);
+			log.info("Topf {}: {}", i, topf[i]);
+		}
+		List<Team>[] gruppe = new List[num_groups];
+		for (int i = 0; i < num_groups; i++) {
+			gruppe[i] = new ArrayList<>();
+		}
+		
+		// TODO: Ensure that we can add confederation rule is not violated
+		for (int i = 0; i < num_groups; i++) {
+			for (int j = 0; j < teamsInGrp; j++) {
+				gruppe[i].add(topf[j].get(i));
+			}
+		}
+		
+		List<Group> grps = new ArrayList<>();
+		for (int i = 0; i < num_groups; i++) {
+			Group grp = GruppenFactory.create_WM_Group(i, gruppe[i]);
+			grps.add(grp);
+		}
+		
+		return grps;
+	}
+	
+	private static boolean canAdd(Collection<Team> teams, Team toAdd) {
+		if (teams.contains(toAdd))
+			return false;
+		Confederation cf = toAdd.getConfed();
+		long same_cf = teams.stream().filter(t -> t.getConfed() == cf).count();
+		// There may be no team from the same Confederation in the Group (except UEFA,
+		// where 1 may be in there for a max total of 2)
+		return (cf == Confederation.UEFA) ? same_cf <= 1 : same_cf == 0;
+	}
+	
 }

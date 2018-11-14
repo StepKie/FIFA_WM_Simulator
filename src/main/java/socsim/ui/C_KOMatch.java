@@ -78,8 +78,7 @@ public class C_KOMatch extends Composite {
 	/**
 	 * @wbp.factory
 	 */
-	public static C_KOMatch createCompositeKoMatch(Composite parent, boolean reversed, boolean initialVisible,
-			int vertSpan) {
+	public static C_KOMatch createCompositeKoMatch(Composite parent, boolean reversed, boolean initialVisible, int vertSpan) {
 		return new C_KOMatch(parent, SWT.BORDER, reversed, initialVisible, vertSpan);
 	}
 	
