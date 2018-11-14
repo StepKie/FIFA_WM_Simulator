@@ -1,7 +1,7 @@
 package socsim.ui;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Iterator;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
@@ -23,7 +23,7 @@ import socsim.io.Fussball_IO;
 
 public class C_KOPhase extends Composite {
 	
-	@Getter List<C_KOMatch> matches;
+	@Getter Iterator<C_KOMatch> matches;
 	
 	private Composite finale;
 	private CLabel lbl_finale_t2;
@@ -85,7 +85,9 @@ public class C_KOPhase extends Composite {
 		
 		C_KOMatch c_af8 = C_KOMatch.createCompositeKoMatch(this, true, false, 1);
 		
-		matches = Arrays.asList(c_af1, c_af2, c_af3, c_af4, c_af5, c_af6, c_af7, c_af8, c_vf1, c_vf2, c_vf3, c_vf4, c_hf1, c_hf2);
+		// FIXME Worst hack (why is there one more, stupid iterator )...
+		matches = Arrays.asList(c_af1, c_af2, c_af3, c_af4, c_af5, c_af6, c_af7, c_af8, c_vf1, c_vf2, c_vf3, c_vf4,
+				c_hf1, c_hf2, c_af1).iterator();
 	}
 	
 	private Composite createFinaleComp() {
@@ -136,5 +138,13 @@ public class C_KOPhase extends Composite {
 			c.setVisible(true);
 		btnAgain.setVisible(true);
 		layout();
+	}
+	
+	public void updateMatch(Match upNext) {
+		C_KOMatch match_ui = matches.next();
+		if (matches.hasNext())
+			match_ui.updateMatch(upNext);
+		else
+			showFinale(upNext);
 	}
 }
