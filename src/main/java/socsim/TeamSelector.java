@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import socsim.ui.GruppenFactory;
 
 /**
  * Selection routines (drawing, making groups etc.) for various scenarios

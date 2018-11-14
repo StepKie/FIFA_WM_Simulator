@@ -55,7 +55,7 @@ public class KORound {
 
 	}
 
-	public String getRoundName(int size) {
+	public static String getRoundName(int size) {
 		switch (size) {
 		case 16:
 			return "Achtelfinale";

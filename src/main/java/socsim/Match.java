@@ -99,6 +99,9 @@ public class Match implements Comparable<Match> {
 	
 	@Override
 	public int compareTo(Match o) {
-		return Comparator.comparing(Match::getDate).thenComparing(Match::getHomeTeam).thenComparing(Match::getGuestTeam).compare(this, o);
+		return Comparator.comparing(Match::getDate) //
+				.thenComparing(m -> m.getHomeTeam().getId()) //
+				.thenComparing(m -> m.getHomeTeam().getId()) //
+				.compare(this, o);
 	}
 }

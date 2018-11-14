@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import socsim.Group;
+import socsim.GruppenFactory;
 import socsim.Match;
 import socsim.Table.Row;
 

@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class Table {
 	
 	public static Comparator<Row> POINTS = Comparator.comparingInt(Row::getPoints);
-	public static Comparator<Row> GOAL_DIFFERENCE = Comparator.comparingInt(Row::getPoints);
+	public static Comparator<Row> GOAL_DIFFERENCE = Comparator.comparingInt(Row::getGoalsDifference);
 	public static Comparator<Row> GOALS_SCORED = Comparator.comparingInt(Row::getGoalsFor);
 	// public static Comparator<Row> DIRECT_COMPARISON = (r1, r2) ->
 	// GOAL_DIFFERENCE.compare(r1.getOuterTable().filter(t), r2);
