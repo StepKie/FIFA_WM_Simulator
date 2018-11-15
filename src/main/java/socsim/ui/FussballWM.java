@@ -12,10 +12,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import lombok.extern.slf4j.Slf4j;
-import socsim.CompetitionPhase;
 import socsim.Group;
-import socsim.KORound;
-import socsim.Vorrunde;
+import socsim.phase.CompetitionPhase;
+import socsim.phase.Draw;
+import socsim.phase.KORound;
+import socsim.phase.Vorrunde;
 
 /**
  * Main UI hub
@@ -23,11 +24,13 @@ import socsim.Vorrunde;
 @Slf4j
 public class FussballWM {
 	
-	CompetitionPhase currentPhase;
 	private static final String APPLICATION_ICON = "/FIFA-World-Cup-2018.png";
+	
+	CompetitionPhase currentPhase;
 	protected Shell shlFussballWm;
 	List<Group> gruppen;
 	
+	Draw draw;
 	Vorrunde vorrunde;
 	KORound koRunde;
 	
@@ -68,9 +71,8 @@ public class FussballWM {
 		rl_shlFussballWm.center = true;
 		shlFussballWm.setLayout(rl_shlFussballWm);
 		
-		vorrunde = new Vorrunde(gruppen, shlFussballWm);
-		currentPhase = vorrunde;
-		
+		currentPhase = new Draw(gruppen, shlFussballWm);
+		log.info("New Fussball WM session started");
 		shlFussballWm.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {

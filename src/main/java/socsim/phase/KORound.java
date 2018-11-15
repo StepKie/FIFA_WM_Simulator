@@ -1,4 +1,4 @@
-package socsim;
+package socsim.phase;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.HOURS;
@@ -7,11 +7,13 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import socsim.Group;
+import socsim.Match;
+import socsim.Team;
 import socsim.ui.C_KOPhase;
 
 @Slf4j
@@ -20,10 +22,11 @@ public class KORound implements CompetitionPhase {
 	C_KOPhase gui;
 	
 	@Getter List<Match> matches = new ArrayList<>();
-	Instant startDate = new GregorianCalendar(2012, 6, 30, 16, 0).toInstant();
+	Instant startDate;
 	
 	public KORound(List<Team> teams, Instant date, C_KOPhase gui) {
 		this.gui = gui;
+		this.startDate = date;
 		// TODO May use pairing strategy here
 		for (int i = 0; i < teams.size(); i = i + 2) {
 			matches.add(new Match(date, teams.get(i), teams.get(i + 1), true));
@@ -35,10 +38,12 @@ public class KORound implements CompetitionPhase {
 		return matches.stream().filter(m -> !m.isFinished()).findFirst().orElse(null);
 	}
 	
+	@Override
 	public boolean isFinished() {
 		return (nextMatch() == null);
 	}
 	
+	@Override
 	public KORound createNextRound() {
 		// TODO HAAAACK
 		if (matches.size() == 1)
@@ -93,6 +98,7 @@ public class KORound implements CompetitionPhase {
 		);
 	}
 	
+	@Override
 	public void step() {
 		if (isFinished()) {
 			log.info("KO-Runde vorbei");
@@ -106,14 +112,8 @@ public class KORound implements CompetitionPhase {
 			}
 		}
 		Match upNext = nextMatch();
-		log.info("Game: {}", upNext.toString());
 		upNext.play();
+		log.info("Game: {}", upNext.toString());
 		gui.updateMatch(upNext);
 	}
-	
-	@Override
-	public CompetitionPhase jump() {
-		return isFinished() ? createNextRound() : this;
-		
-	};
 }
