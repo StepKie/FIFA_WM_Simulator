@@ -5,36 +5,43 @@ import static java.time.temporal.ChronoUnit.HOURS;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import socsim.Group;
-import socsim.Match;
+import socsim.KOMatch;
 import socsim.Team;
+import socsim.ui.C_KOMatch;
 import socsim.ui.C_KOPhase;
+import socsim.ui.FussballWM;
 
 @Slf4j
 public class KORound implements CompetitionPhase {
 	
+	Map<KOMatch, C_KOMatch> map;
 	C_KOPhase gui;
 	
-	@Getter List<Match> matches = new ArrayList<>();
+	@Getter List<KOMatch> matches = new ArrayList<>();
 	Instant startDate;
 	
 	public KORound(List<Team> teams, Instant date, C_KOPhase gui) {
 		this.gui = gui;
 		this.startDate = date;
+		KOMatch tree = generateTree(4);
 		// TODO May use pairing strategy here
 		for (int i = 0; i < teams.size(); i = i + 2) {
-			matches.add(new Match(date, teams.get(i), teams.get(i + 1), true));
+			matches.add(new KOMatch(date, teams.get(i), teams.get(i + 1)));
 			date = (i % 2 == 0) ? date.plus(4, HOURS) : date.plus(20, HOURS);
 		}
 	}
 	
-	public Match nextMatch() {
+	private static KOMatch generateTree(int depth) {
+		return (depth <= 0) ? null : new KOMatch(null, generateTree(depth - 1), generateTree(depth - 1));
+	}
+	
+	public KOMatch nextMatch() {
 		return matches.stream().filter(m -> !m.isFinished()).findFirst().orElse(null);
 	}
 	
@@ -45,9 +52,10 @@ public class KORound implements CompetitionPhase {
 	
 	@Override
 	public KORound createNextRound() {
-		// TODO HAAAACK
-		if (matches.size() == 1)
-			return this;
+		if (matches.size() == 1) {
+			return null;
+		}
+		
 		assert (isFinished()) : "Round not finished!";
 		Instant date = matches.get(matches.size() - 1).getDate().plus(1, DAYS);
 		List<Team> nextRound = new ArrayList<>();
@@ -86,34 +94,16 @@ public class KORound implements CompetitionPhase {
 		
 	}
 	
-	public static List<Team> getAF(List<Group> gruppen) {
-		return Arrays.asList(gruppen.get(0).getTeam(1), gruppen.get(1).getTeam(2), // A1-B2
-				gruppen.get(2).getTeam(1), gruppen.get(3).getTeam(2), // C1-D2
-				gruppen.get(1).getTeam(1), gruppen.get(0).getTeam(2), // B1-A2
-				gruppen.get(3).getTeam(1), gruppen.get(2).getTeam(2), // D1-C2
-				gruppen.get(4).getTeam(1), gruppen.get(5).getTeam(2), // E1-F2
-				gruppen.get(6).getTeam(1), gruppen.get(7).getTeam(2), // G1-H2
-				gruppen.get(5).getTeam(1), gruppen.get(4).getTeam(2), // F1-E2
-				gruppen.get(7).getTeam(1), gruppen.get(6).getTeam(2) // H1-G2
-		);
-	}
-	
 	@Override
 	public void step() {
 		if (isFinished()) {
-			log.info("KO-Runde vorbei");
-			if (getMatches().size() > 1) {
-				log.info("Runde zuende (WELCHE?!)", getRoundName(0));
-				createNextRound();
-			} else {
-				gui.showFinale(getMatches().get(0));
-				System.err.println("WINNER: " + getMatches().get(0).getWinner());
-				return;
-			}
+			gui.getShell().close();
+			new FussballWM().open();
+			return;
 		}
-		Match upNext = nextMatch();
+		KOMatch upNext = nextMatch();
 		upNext.play();
 		log.info("Game: {}", upNext.toString());
-		gui.updateMatch(upNext);
+		map.get(upNext).updateMatch(upNext);
 	}
 }

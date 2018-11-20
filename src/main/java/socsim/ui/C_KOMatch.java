@@ -7,11 +7,19 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import lombok.Getter;
+import lombok.Setter;
+import socsim.KOMatch;
 import socsim.Match;
+import socsim.Team;
 
 public class C_KOMatch extends Composite {
 	
-	private Match match;
+	@Getter private Match match;
+	
+	@Getter @Setter private C_KOMatch home_previous;
+	@Getter @Setter private C_KOMatch away_previous;
+	
 	private CLabel label_team1;
 	private Label label_score1;
 	private CLabel label_team2;
@@ -82,25 +90,39 @@ public class C_KOMatch extends Composite {
 		return new C_KOMatch(parent, SWT.BORDER, reversed, initialVisible, vertSpan);
 	}
 	
-	public void updateMatch(Match m) {
-		label_team1.setText(m.getHomeTeam().toString());
-		label_team1.setImage(m.getHomeTeam().getFlag());
-		label_team1.setToolTipText(m.getHomeTeam().getTooltip());
-		
-		label_team2.setText(m.getGuestTeam().toString());
-		label_team2.setImage(m.getGuestTeam().getFlag());
-		label_team2.setToolTipText(m.getGuestTeam().getTooltip());
-		
+	public void updateMatch(KOMatch m) {
+		match = m;
+		if (m == null)
+			return;
+		updateLabel(m.getHomeTeam(), label_team1, label_score1, m.getHomeScore());
+		updateLabel(m.getGuestTeam(), label_team2, label_score2, m.getGuestScore());
 		label_score1.setText(Integer.toString(m.getHomeScore()));
-		label_score2.setText(Integer.toString(m.getGuestScore()));
 		
-		label_team1.setVisible(true);
-		label_team2.setVisible(true);
-		label_score1.setVisible(true);
-		label_score2.setVisible(true);
 		lblNv.setVisible(m.isVerlängerung());
 		;
 		
 		layout();
+	}
+	
+	private void updateLabel(Team t, CLabel label_team, Label label_score, int score) {
+		if (t == null) {
+			label_team.setVisible(false);
+			label_score.setVisible(false);
+			return;
+		}
+		
+		label_team.setText(t.toString());
+		label_team.setImage(t.getFlag());
+		label_team.setToolTipText(t.getTooltip());
+		
+		label_score.setText(Integer.toString(score));
+		
+		label_team.setVisible(true);
+		label_score.setVisible(true);
+	}
+	
+	public void updateWinner(Team winner) {
+		updateLabel(winner, label_team1, label_score1, 0);
+		
 	}
 }

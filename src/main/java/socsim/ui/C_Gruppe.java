@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
+import lombok.Getter;
 import socsim.Group;
 import socsim.GruppenFactory;
 import socsim.Match;
@@ -25,7 +26,7 @@ public class C_Gruppe extends Composite {
 		return gruppe;
 	}
 	
-	private Group gruppe;
+	@Getter private Group gruppe;
 	
 	C_Row[] teams = new C_Row[4];
 	Label[] pairing = new Label[6];

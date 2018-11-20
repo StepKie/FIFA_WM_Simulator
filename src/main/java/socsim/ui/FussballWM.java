@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import lombok.extern.slf4j.Slf4j;
-import socsim.Group;
 import socsim.phase.CompetitionPhase;
 import socsim.phase.Draw;
 import socsim.phase.KORound;
@@ -25,10 +24,11 @@ import socsim.phase.Vorrunde;
 public class FussballWM {
 	
 	private static final String APPLICATION_ICON = "/FIFA-World-Cup-2018.png";
+	public static final int WIDTH = 1450;
+	public static final int HEIGHT = 400;
 	
 	CompetitionPhase currentPhase;
 	protected Shell shlFussballWm;
-	List<Group> gruppen;
 	
 	Draw draw;
 	Vorrunde vorrunde;
@@ -36,8 +36,11 @@ public class FussballWM {
 	
 	List<C_Gruppe> gruppenComps = new ArrayList<>();
 	
-	public FussballWM(List<Group> groups) {
-		this.gruppen = groups;
+	public FussballWM() {
+	}
+	
+	public static void main(String[] args) {
+		new FussballWM().open();
 	}
 	
 	/**
@@ -61,7 +64,7 @@ public class FussballWM {
 	 */
 	protected void createContents() {
 		shlFussballWm = new Shell();
-		shlFussballWm.setSize(1700, 400);
+		shlFussballWm.setSize(WIDTH, HEIGHT);
 		shlFussballWm.setImage(SWTResourceManager.getImage(this.getClass(), APPLICATION_ICON));
 		shlFussballWm.setText("Fussball WM");
 		
@@ -71,18 +74,28 @@ public class FussballWM {
 		rl_shlFussballWm.center = true;
 		shlFussballWm.setLayout(rl_shlFussballWm);
 		
-		currentPhase = new Draw(gruppen, shlFussballWm);
+		currentPhase = new Draw(shlFussballWm);
 		log.info("New Fussball WM session started");
 		shlFussballWm.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+				if (currentPhase == null) {
+					shlFussballWm.close();
+					if (e.character != SWT.ESC) {
+						new FussballWM().open();
+					}
+					return;
+				}
+				
 				if (e.character == SWT.ESC) {
 					currentPhase = currentPhase.jump();
 				} else {
+					currentPhase.step();
 					if (currentPhase.isFinished()) {
 						currentPhase = currentPhase.createNextRound();
+						
 					}
-					currentPhase.step();
+					
 				}
 			}
 		});

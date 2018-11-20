@@ -11,6 +11,8 @@ import org.eclipse.swt.widgets.Shell;
 
 import lombok.extern.slf4j.Slf4j;
 import socsim.Group;
+import socsim.TeamSelector;
+import socsim.io.Fussball_IO;
 import socsim.ui.C_Gruppe;
 
 @Slf4j
@@ -24,9 +26,12 @@ public class Draw implements CompetitionPhase {
 	Shell parent;
 	
 	// TODO Integrate TeamSelector here, do not pass in Groups directly
-	public Draw(List<Group> gruppen, Shell parent) {
+	public Draw(Shell parent) {
 		this.parent = parent;
-		this.gruppen = gruppen;
+		
+		var allTeams = Fussball_IO.parseTeams();
+		gruppen = new TeamSelector(allTeams).getGroups();
+		
 		for (Group gruppe : gruppen) {
 			total = (int) gruppen.stream().flatMap(g -> g.getTeams().stream()).count();
 			C_Gruppe gruppenComp = C_Gruppe.createWMGruppe(parent, gruppe);

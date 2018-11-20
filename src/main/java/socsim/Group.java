@@ -90,12 +90,12 @@ public class Group implements Comparable<Group> {
 	 */
 	public void createSchedule(Instant start) {
 		List<Team> byElo = teams.stream().sorted(Comparator.comparingInt(Team::getElo).reversed()).collect(Collectors.toList());
-		addMatch(new Match(start, byElo.get(0), byElo.get(1), false));
-		addMatch(new Match(start.plus(4, HOURS), byElo.get(2), byElo.get(3), false));
-		addMatch(new Match(start.plus(8, DAYS), byElo.get(0), byElo.get(2), false));
-		addMatch(new Match(start.plus(8, DAYS).plus(4, HOURS), byElo.get(1), byElo.get(3), false));
-		addMatch(new Match(start.plus(16, DAYS), byElo.get(0), byElo.get(3), false));
-		addMatch(new Match(start.plus(16, DAYS).plus(4, HOURS), byElo.get(1), byElo.get(2), false));
+		addMatch(new Match(start, byElo.get(0), byElo.get(1)));
+		addMatch(new Match(start.plus(4, HOURS), byElo.get(2), byElo.get(3)));
+		addMatch(new Match(start.plus(8, DAYS), byElo.get(0), byElo.get(2)));
+		addMatch(new Match(start.plus(8, DAYS).plus(4, HOURS), byElo.get(1), byElo.get(3)));
+		addMatch(new Match(start.plus(16, DAYS), byElo.get(0), byElo.get(3)));
+		addMatch(new Match(start.plus(16, DAYS).plus(4, HOURS), byElo.get(1), byElo.get(2)));
 		
 	}
 }
