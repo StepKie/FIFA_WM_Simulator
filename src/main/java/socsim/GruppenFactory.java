@@ -42,13 +42,7 @@ public final class GruppenFactory {
 		group.addTeam(new Team("POL", "Polen", 1000, Confederation.UEFA, null));
 		group.addTeam(new Team("RUS", "Russland", 1000, Confederation.UEFA, null));
 		
-		Instant i = new GregorianCalendar(2012, 6, 8, 18, 0).toInstant();
-		group.addMatch(new Match(i, group.getTeam("POL"), group.getTeam("GRE"), 1, 1));
-		group.addMatch(new Match(i, group.getTeam("RUS"), group.getTeam("CZE"), 4, 1));
-		group.addMatch(new Match(i, group.getTeam("GRE"), group.getTeam("CZE"), 1, 2));
-		group.addMatch(new Match(i, group.getTeam("POL"), group.getTeam("RUS"), 1, 1));
-		group.addMatch(new Match(i, group.getTeam("GRE"), group.getTeam("RUS"), 1, 0));
-		group.addMatch(new Match(i, group.getTeam("CZE"), group.getTeam("POL"), 1, 0));
+		group.createSchedule(new GregorianCalendar(2012, 6, 8, 18, 0).toInstant());
 		
 		return group;
 	}

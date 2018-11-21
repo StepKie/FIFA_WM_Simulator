@@ -1,5 +1,7 @@
 package socsim;
 
+import java.util.Comparator;
+
 import org.eclipse.swt.graphics.Image;
 
 import lombok.Value;
@@ -14,7 +16,7 @@ public class Team implements Comparable<Team> {
 	
 	@Override
 	public int compareTo(Team other) {
-		return id.compareTo(other.id);
+		return Comparator.nullsFirst(Comparator.comparing(Team::getId)).compare(this, other);
 	}
 	
 	@Override

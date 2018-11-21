@@ -8,37 +8,39 @@ import org.apache.commons.math3.distribution.IntegerDistribution;
 import org.apache.commons.math3.distribution.PoissonDistribution;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class Match implements Comparable<Match> {
-	@Getter @NonNull protected Instant date;
+	
+	enum State {
+		SCHEDULED,
+		SETUP,
+		FINISHED
+	}
+	
+	@Getter protected Instant date;
+	@Getter private String name;
 	@Getter protected Team homeTeam;
 	@Getter protected Team guestTeam;
 	@Getter protected int homeScore = -1;
 	@Getter protected int guestScore = -1;
-	
-	@Getter protected boolean finished = false;
+	@Getter State state;
 	
 	// Base goal scoring probabilities
 	public static final double[] base_probabilities = new double[] { 0.21, 0.3, 0.27, 0.15, 0.05, 0.01, 0.01 };
 	
-	public Match(Instant date, Team homeTeam, Team guestTeam) {
-		this(date);
+	public Match(Instant date, String name, Team homeTeam, Team guestTeam) {
+		this.date = date;
+		this.name = name;
 		this.homeTeam = homeTeam;
 		this.guestTeam = guestTeam;
 	}
 	
-	public Match(Instant date, Team homeTeam, Team guestTeam, int homeScore, int guestScore) {
-		this(date, homeTeam, guestTeam);
-		this.homeScore = homeScore;
-		this.guestScore = guestScore;
-		finished = true;
-	}
-	
 	public void play() {
-		assert (homeTeam != null && guestTeam != null && !finished) : "Attempted to play uninitialized match";
+		homeTeam = getHomeTeam();
+		guestTeam = getGuestTeam();
+		assert (homeTeam != null && guestTeam != null && !isFinished()) : "Attempted to play uninitialized match";
 		int eloDiff = homeTeam.getElo() - guestTeam.getElo();
 		double eloScaleFactor = 0.001 * eloDiff;
 		
@@ -63,13 +65,20 @@ public class Match implements Comparable<Match> {
 			}
 			totalGoals--;
 		}
-		
-		finished = true;
+		state = State.FINISHED;
+	}
+	
+	public boolean isFinished() {
+		return state == State.FINISHED;
+	}
+	
+	public boolean isSetup() {
+		return getHomeTeam() != null && getGuestTeam() != null && !isFinished();
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("  %s    %-20s  -  %-20s    %2d : %2d", date.toString(), homeTeam, guestTeam, homeScore, guestScore);
+		return String.format("%s %-15s %-15s - %-15s %2d : %2d", date, name, homeTeam, guestTeam, homeScore, guestScore);
 	}
 	
 	public Team getWinner() {
@@ -83,9 +92,7 @@ public class Match implements Comparable<Match> {
 	
 	@Override
 	public int compareTo(Match o) {
-		return Comparator.comparing(Match::getDate) //
-				.thenComparing(m -> m.getHomeTeam().getId()) //
-				.thenComparing(m -> m.getHomeTeam().getId()) //
+		return Comparator.nullsLast(Comparator.comparing(Match::getDate)) //
 				.compare(this, o);
 	}
 }
