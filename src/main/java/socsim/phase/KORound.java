@@ -5,35 +5,31 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import socsim.BinaryTree;
 import socsim.KOMatch;
 import socsim.Team;
-import socsim.ui.C_KOMatch;
 import socsim.ui.C_KOPhase;
 import socsim.ui.FussballWM;
 
 @Slf4j
 public class KORound implements CompetitionPhase {
 	
-	Map<KOMatch, C_KOMatch> map = new TreeMap<>();
-	C_KOPhase gui;
+	@Setter C_KOPhase gui;
 	
 	// Entire bracket (finale is the root)
-	private List<KOMatch> matches;
+	@Getter private List<KOMatch> matches;
 	
-	public KORound(List<Team> teams, Instant date, C_KOPhase gui) {
-		this.gui = gui;
+	public KORound(List<Team> teams, Instant date) {
+		
 		log.info("Creating KORound with {}", teams);
 		List<KOMatch> firstRound = makeFirstRoundFromQualifiedTeams(teams, date);
 		matches = BinaryTree.generateTree(firstRound, KOMatch.NEXT_ROUND).getAll(Comparator.comparing(KOMatch::getDate));
 		log.info("Teams: {}, Matches created: {}", teams.size(), matches.size());
-		for (int i = 0; i < matches.size(); i++) {
-			map.put(matches.get(i), gui.getMatches().get(i));
-		}
+		
 	}
 	
 	private static List<KOMatch> makeFirstRoundFromQualifiedTeams(List<Team> teams, Instant start) {
@@ -75,9 +71,8 @@ public class KORound implements CompetitionPhase {
 		KOMatch upNext = nextMatch();
 		upNext.play();
 		log.info("Game: {}", upNext.toString());
-		if (isFinished())
-			gui.showFinale(upNext);
-		else
-			map.get(upNext).updateMatch(upNext);
+		
+		gui.refresh();
+		
 	}
 }

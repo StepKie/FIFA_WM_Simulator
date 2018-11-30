@@ -9,6 +9,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -19,6 +20,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import lombok.Getter;
 import socsim.Match;
 import socsim.io.Fussball_IO;
+import socsim.phase.KORound;
 
 public class C_KOPhase extends Composite {
 	
@@ -31,6 +33,14 @@ public class C_KOPhase extends Composite {
 	
 	private Button btnAgain;
 	
+	public C_KOPhase(Composite parent, int style, KORound koRound) {
+		this(parent, style);
+		matches.forEach(m -> m.setMatch(koRound.getMatches().get(m.getOrder() - 1)));
+		setLayoutData(new RowData(FussballWM.WIDTH - 100, SWT.DEFAULT));
+		setVisible(true);
+		getShell().layout();
+	}
+	
 	/**
 	 * Create the composite.
 	 * 
@@ -41,27 +51,27 @@ public class C_KOPhase extends Composite {
 		super(parent, style);
 		setLayout(new GridLayout(7, false));
 		
-		C_KOMatch c_af1 = C_KOMatch.createCompositeKoMatch(this, false, false, 1);
-		C_KOMatch c_vf1 = C_KOMatch.createCompositeKoMatch(this, false, false, 2);
+		C_KOMatch c_af1 = C_KOMatch.createCompositeKoMatch(this, false, 1, 1);
+		C_KOMatch c_vf1 = C_KOMatch.createCompositeKoMatch(this, false, 2, 9);
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
-		C_KOMatch c_vf3 = C_KOMatch.createCompositeKoMatch(this, true, false, 2);
-		C_KOMatch c_af3 = C_KOMatch.createCompositeKoMatch(this, true, false, 1);
+		C_KOMatch c_vf2 = C_KOMatch.createCompositeKoMatch(this, true, 2, 10);
+		C_KOMatch c_af3 = C_KOMatch.createCompositeKoMatch(this, true, 1, 3);
 		
-		C_KOMatch c_af2 = C_KOMatch.createCompositeKoMatch(this, false, false, 1);
-		C_KOMatch c_hf1 = C_KOMatch.createCompositeKoMatch(this, false, false, 2);
-		finale = createFinaleComp();
-		C_KOMatch c_hf2 = C_KOMatch.createCompositeKoMatch(this, true, false, 2);
-		C_KOMatch c_af4 = C_KOMatch.createCompositeKoMatch(this, true, false, 1);
+		C_KOMatch c_af2 = C_KOMatch.createCompositeKoMatch(this, false, 1, 2);
+		C_KOMatch c_hf1 = C_KOMatch.createCompositeKoMatch(this, false, 2, 13);
+		C_KOMatch c_f = createFinaleComp();
+		C_KOMatch c_hf2 = C_KOMatch.createCompositeKoMatch(this, true, 2, 14);
+		C_KOMatch c_af4 = C_KOMatch.createCompositeKoMatch(this, true, 1, 4);
 		
-		C_KOMatch c_af5 = C_KOMatch.createCompositeKoMatch(this, false, false, 1);
-		C_KOMatch c_vf2 = C_KOMatch.createCompositeKoMatch(this, false, false, 2);
+		C_KOMatch c_af5 = C_KOMatch.createCompositeKoMatch(this, false, 1, 5);
+		C_KOMatch c_vf3 = C_KOMatch.createCompositeKoMatch(this, false, 2, 11);
 		
-		C_KOMatch c_vf4 = C_KOMatch.createCompositeKoMatch(this, true, false, 2);
-		C_KOMatch c_af7 = C_KOMatch.createCompositeKoMatch(this, true, false, 1);
+		C_KOMatch c_vf4 = C_KOMatch.createCompositeKoMatch(this, true, 2, 12);
+		C_KOMatch c_af7 = C_KOMatch.createCompositeKoMatch(this, true, 1, 7);
 		
-		C_KOMatch c_af6 = C_KOMatch.createCompositeKoMatch(this, false, false, 1);
+		C_KOMatch c_af6 = C_KOMatch.createCompositeKoMatch(this, false, 1, 6);
 		new Label(this, SWT.NONE);
 		
 		btnAgain = new Button(this, SWT.CENTER);
@@ -82,36 +92,16 @@ public class C_KOPhase extends Composite {
 		
 		new Label(this, SWT.NONE);
 		
-		C_KOMatch c_af8 = C_KOMatch.createCompositeKoMatch(this, true, false, 1);
+		C_KOMatch c_af8 = C_KOMatch.createCompositeKoMatch(this, true, 1, 8);
 		
 		// FIXME Worst hack (why is there one more, stupid iterator )...
-		matches = Arrays.asList(c_af1, c_af2, c_af3, c_af4, c_af5, c_af6, c_af7, c_af8, c_vf1, c_vf2, c_vf3, c_vf4, c_hf1, c_hf2, c_af1);
+		matches = Arrays.asList(c_af1, c_af2, c_af3, c_af4, c_af5, c_af6, c_af7, c_af8, c_vf1, c_vf2, c_vf3, c_vf4, c_hf1, c_hf2, c_f);
+		
 	}
 	
-	private Composite createFinaleComp() {
-		Composite composite = new Composite(this, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 2));
-		composite.setLayout(new GridLayout(3, false));
-		
-		lbl_finale_t1 = new CLabel(composite, SWT.CENTER);
-		GridData gd_lbl_finale_t1 = new GridData(SWT.CENTER, SWT.CENTER, false, true, 1, 1);
-		gd_lbl_finale_t1.widthHint = 150;
-		lbl_finale_t1.setLayoutData(gd_lbl_finale_t1);
-		lbl_finale_t1.setText("Team 1");
-		lbl_finale_t1.setVisible(false);
-		
-		final_result = new Label(composite, SWT.NONE);
-		final_result.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, true, 1, 1));
-		final_result.setText("4:1");
-		final_result.setVisible(false);
-		
-		lbl_finale_t2 = new CLabel(composite, SWT.RIGHT_TO_LEFT);
-		lbl_finale_t2.setAlignment(SWT.CENTER);
-		GridData gd_lbl_finale_t2 = new GridData(SWT.CENTER, SWT.CENTER, false, true, 1, 1);
-		gd_lbl_finale_t2.widthHint = 150;
-		lbl_finale_t2.setLayoutData(gd_lbl_finale_t2);
-		lbl_finale_t2.setText("Team 2");
-		lbl_finale_t2.setVisible(false);
+	private C_KOMatch createFinaleComp() {
+		C_KOMatch composite = C_KOMatch.createCompositeKoMatch(this, false, 1, 15);
+		composite.finalHack();
 		
 		return composite;
 	}
@@ -136,5 +126,10 @@ public class C_KOPhase extends Composite {
 			c.setVisible(true);
 		btnAgain.setVisible(true);
 		layout();
+	}
+	
+	public void refresh() {
+		getMatches().forEach(C_KOMatch::refresh);
+		
 	}
 }

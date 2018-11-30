@@ -80,10 +80,6 @@ public class FussballWM {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (currentPhase == null) {
-					shlFussballWm.close();
-					if (e.character != SWT.ESC) {
-						new FussballWM().open();
-					}
 					return;
 				}
 				

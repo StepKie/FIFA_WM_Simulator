@@ -6,7 +6,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Shell;
 
 import lombok.NonNull;
@@ -54,13 +53,15 @@ public class Vorrunde implements CompetitionPhase {
 		gruppenComps.forEach(cgruppe -> cgruppe.refresh(null));
 		log.info("Vorrunde vorbei");
 		getShell().setSize(FussballWM.WIDTH, FussballWM.HEIGHT * 2);
-		C_KOPhase koPhase = new C_KOPhase(getShell(), SWT.NONE);
-		koPhase.setLayoutData(new RowData(FussballWM.WIDTH - 100, SWT.DEFAULT));
-		koPhase.setVisible(true);
-		getShell().layout();
 		
 		Instant date = new GregorianCalendar(2012, 6, 30, 16, 0).toInstant();
-		return new KORound(getAF(), date, koPhase);
+		var koRound = new KORound(getAF(), date);
+		
+		C_KOPhase koPhase = new C_KOPhase(getShell(), SWT.NONE, koRound);
+		koRound.setGui(koPhase);
+		koPhase.refresh();
+		
+		return koRound;
 	}
 	
 	public List<Team> getAF() {

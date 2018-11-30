@@ -37,7 +37,8 @@ public class BinaryTree<V> {
 		qLeft.add(qRight.poll());
 		mergeStep(qLeft, merger);
 		BinaryTree<V> finalTree = qLeft.poll();
-		assert (qLeft.isEmpty() && qRight.isEmpty()) : "All queues done, tree created";
+		assert (qLeft.isEmpty() && qRight.isEmpty()) : "Tree is not balanced";
+		log.info("Tree creation complete");
 		return finalTree;
 	}
 	
