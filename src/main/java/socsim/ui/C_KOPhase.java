@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -12,24 +11,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import lombok.Getter;
-import socsim.Match;
-import socsim.io.Fussball_IO;
 import socsim.phase.KORound;
 
 public class C_KOPhase extends Composite {
 	
 	@Getter List<C_KOMatch> matches;
-	
-	private Composite finale;
-	private CLabel lbl_finale_t2;
-	private Label final_result;
-	private CLabel lbl_finale_t1;
 	
 	private Button btnAgain;
 	
@@ -61,7 +51,7 @@ public class C_KOPhase extends Composite {
 		
 		C_KOMatch c_af2 = C_KOMatch.createCompositeKoMatch(this, false, 1, 2);
 		C_KOMatch c_hf1 = C_KOMatch.createCompositeKoMatch(this, false, 2, 13);
-		C_KOMatch c_f = createFinaleComp();
+		C_KOMatch c_f = new C_Finale(this, SWT.BORDER, 2, 15);
 		C_KOMatch c_hf2 = C_KOMatch.createCompositeKoMatch(this, true, 2, 14);
 		C_KOMatch c_af4 = C_KOMatch.createCompositeKoMatch(this, true, 1, 4);
 		
@@ -88,48 +78,22 @@ public class C_KOPhase extends Composite {
 		gd_btnAgain.widthHint = 100;
 		btnAgain.setLayoutData(gd_btnAgain);
 		btnAgain.setText("Nochmal!");
-		btnAgain.setVisible(false);
+		btnAgain.setVisible(true);
 		
 		new Label(this, SWT.NONE);
 		
 		C_KOMatch c_af8 = C_KOMatch.createCompositeKoMatch(this, true, 1, 8);
 		
 		// FIXME Worst hack (why is there one more, stupid iterator )...
-		matches = Arrays.asList(c_af1, c_af2, c_af3, c_af4, c_af5, c_af6, c_af7, c_af8, c_vf1, c_vf2, c_vf3, c_vf4, c_hf1, c_hf2, c_f);
+		matches = Arrays.asList(c_af1, c_af2, c_af3, c_af4, c_af5, c_af6, c_af7, c_af8, c_vf1, c_vf2, c_vf3, c_vf4,
+				c_hf1, c_hf2, c_f);
 		
-	}
-	
-	private C_KOMatch createFinaleComp() {
-		C_KOMatch composite = C_KOMatch.createCompositeKoMatch(this, false, 1, 15);
-		composite.finalHack();
-		
-		return composite;
-	}
-	
-	public void showFinale(Match match) {
-		
-		lbl_finale_t1.setText(match.getHomeTeam().toString());
-		lbl_finale_t1.setImage(match.getHomeTeam().getFlag());
-		lbl_finale_t2.setText(match.getGuestTeam().toString());
-		lbl_finale_t2.setImage(match.getGuestTeam().getFlag());
-		final_result.setText(match.getHomeScore() + ":" + match.getGuestScore());
-		
-		int colorId = SWT.COLOR_DARK_GREEN;
-		CLabel winner = match.getWinner().equals(match.getHomeTeam()) ? lbl_finale_t1 : lbl_finale_t2;
-		winner.setForeground(Display.getCurrent().getSystemColor(colorId));
-		winner.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
-		
-		winner.setImage(Fussball_IO.getLargeFlag(match.getWinner()));
-		winner.layout();
-		
-		for (Control c : finale.getChildren())
-			c.setVisible(true);
-		btnAgain.setVisible(true);
-		layout();
 	}
 	
 	public void refresh() {
 		getMatches().forEach(C_KOMatch::refresh);
+		if (getMatches().stream().allMatch(m -> m.getMatch().isFinished()))
+			btnAgain.setVisible(true);
 		
 	}
 }
