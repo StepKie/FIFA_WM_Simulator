@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import lombok.Getter;
@@ -22,16 +21,13 @@ public class Table {
 	public static Comparator<Row> POINTS = Comparator.comparingInt(Row::getPoints);
 	public static Comparator<Row> GOAL_DIFFERENCE = Comparator.comparingInt(Row::getGoalsDifference);
 	public static Comparator<Row> GOALS_SCORED = Comparator.comparingInt(Row::getGoalsFor);
-	// public static Comparator<Row> DIRECT_COMPARISON = (r1, r2) ->
-	// GOAL_DIFFERENCE.compare(r1.getOuterTable().filter(t), r2);
 	public static Comparator<Row> DEFAULT = Comparator.nullsFirst(POINTS.thenComparing(GOAL_DIFFERENCE).thenComparing(GOALS_SCORED));
 	public static Comparator<Row> WM_2018 = DEFAULT.thenComparingInt(r -> r.getTeam().getElo());
 	
-	private List<Row> rows = new ArrayList<Row>();
+	@Getter private List<Row> rows = new ArrayList<Row>();
 	@NonNull private Comparator<Row> comparator;
 	private SortedSet<Team> teams = new TreeSet<Team>();
-	private SortedSet<Match> matches = new TreeSet<Match>();
-	private boolean showSubTables = false;
+	@Getter private SortedSet<Match> matches = new TreeSet<Match>();
 	private Set<String> dumpedSubTables = new LinkedHashSet<String>();
 	private String indent = "";
 	
@@ -60,8 +56,7 @@ public class Table {
 		matches.add(match);
 	}
 	
-	public void print(PrintStream out, boolean showSubTables) {
-		this.showSubTables = showSubTables;
+	public void print(PrintStream out) {
 		refresh();
 		for (String dumpedSubTable : dumpedSubTables)
 			out.println(dumpedSubTable);
@@ -93,10 +88,6 @@ public class Table {
 		}
 	}
 	
-	public Table filter(Predicate<Team> t) {
-		return new Table(teams.stream().filter(t), matches.stream().filter(m -> t.test(m.getGuestTeam()) || t.test(m.getHomeTeam())), comparator);
-	}
-	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -113,18 +104,6 @@ public class Table {
 				return row;
 		}
 		return null;
-	}
-	
-	public List<Row> getRows() {
-		return rows;
-	}
-	
-	public SortedSet<Match> getMatches() {
-		return matches;
-	}
-	
-	public boolean isShowSubTables() {
-		return showSubTables;
 	}
 	
 	public void addDumpedSubTable(String dumpedSubTable) {
@@ -165,8 +144,7 @@ public class Table {
 			goalsAway = 0;
 			
 			for (Match match : Table.this.matches) {
-				if (match.getHomeScore() < 0 || match.getGuestScore() < 0
-						|| (!team.equals(match.getHomeTeam()) && !team.equals(match.getGuestTeam())))
+				if (!match.isFinished() || (!team.equals(match.getHomeTeam()) && !team.equals(match.getGuestTeam())))
 					continue;
 				
 				matchesPlayed++;
@@ -201,8 +179,8 @@ public class Table {
 		}
 		
 		private void print(PrintStream out, String indent) {
-			out.println(String.format(indent + "%3d  %-12s  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d", rank, team.getName(), matchesPlayed,
-					matchesWon, matchesDrawn, matchesLost, goalsFor, goalsAgainst, goalsDifference, goalsAway, points));
+			out.println(String.format(indent + "%3d  %-12s  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d", rank, team.getName(),
+					matchesPlayed, matchesWon, matchesDrawn, matchesLost, goalsFor, goalsAgainst, goalsDifference, goalsAway, points));
 		}
 		
 		@Override
@@ -232,8 +210,8 @@ public class Table {
 			builder.append("Row [").append("team=").append(team).append(", rank=").append(rank).append(", points=").append(points)
 					.append(", matchesPlayed=").append(matchesPlayed).append(", matchesWon=").append(matchesWon).append(", matchesDrawn=")
 					.append(matchesDrawn).append(", matchesLost=").append(matchesLost).append(", goalsFor=").append(goalsFor)
-					.append(", goalsAgainst=").append(goalsAgainst).append(", goalsDifference=").append(goalsDifference).append(", goalsAway=")
-					.append(goalsAway).append("]");
+					.append(", goalsAgainst=").append(goalsAgainst).append(", goalsDifference=").append(goalsDifference)
+					.append(", goalsAway=").append(goalsAway).append("]");
 			return builder.toString();
 		}
 		

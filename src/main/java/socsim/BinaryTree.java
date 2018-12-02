@@ -28,11 +28,9 @@ public class BinaryTree<V> {
 			else
 				qRight.add(leafTree);
 		}
-		
 		while (qLeft.size() > 1) {
 			mergeStep(qLeft, merger);
 			mergeStep(qRight, merger);
-			
 		}
 		qLeft.add(qRight.poll());
 		mergeStep(qLeft, merger);

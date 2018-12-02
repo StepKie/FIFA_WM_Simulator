@@ -13,22 +13,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Match implements Comparable<Match> {
 	
-	enum State {
+	public enum State {
 		SCHEDULED,
 		SETUP,
 		FINISHED
 	}
 	
 	@Getter protected Instant date;
-	@Getter private String name;
+	@Getter protected String name;
 	@Getter protected Team homeTeam;
 	@Getter protected Team guestTeam;
-	@Getter protected int homeScore = -1;
-	@Getter protected int guestScore = -1;
+	@Getter protected int homeScore;
+	@Getter protected int guestScore;
 	@Getter State state;
-	
-	// Base goal scoring probabilities
-	public static final double[] base_probabilities = new double[] { 0.21, 0.3, 0.27, 0.15, 0.05, 0.01, 0.01 };
 	
 	public Match(Instant date, String name, Team homeTeam, Team guestTeam) {
 		this.date = date;
@@ -40,22 +37,16 @@ public class Match implements Comparable<Match> {
 	public void play() {
 		homeTeam = getHomeTeam();
 		guestTeam = getGuestTeam();
-		assert (homeTeam != null && guestTeam != null && !isFinished()) : "Attempted to play uninitialized match";
+		
+		assert (isSetup()) : "Attempted to play uninitialized match";
 		int eloDiff = homeTeam.getElo() - guestTeam.getElo();
 		double eloScaleFactor = 0.001 * eloDiff;
 		
 		IntegerDistribution dist = new PoissonDistribution(2.5 + eloScaleFactor);
 		int totalGoals = dist.sample();
-		// Original formula - produces high values, because it is applied to each goal.
-		// Playing around below, fix eventually ...
-		// double expectedScoreElo = 1 / (1 + (Math.pow(10, ((double) homeTeam.getElo()
-		// - (double) guestTeam.getElo()) /
-		// 400)));
 		
 		double expectedScoreElo = 1 / (1 + (Math.pow(10, ((double) homeTeam.getElo() - (double) guestTeam.getElo()) / 400)));
 		
-		homeScore = 0;
-		guestScore = 0;
 		while (totalGoals > 0) {
 			double rd = new Random().nextDouble();
 			if (rd > expectedScoreElo) {
@@ -78,11 +69,12 @@ public class Match implements Comparable<Match> {
 	
 	@Override
 	public String toString() {
-		return String.format("%s %-15s %-15s - %-15s %2d : %2d", date, name, homeTeam, guestTeam, homeScore, guestScore);
+		String ht = homeTeam == null ? "null" : homeTeam.getName();
+		String gt = guestTeam == null ? "null" : guestTeam.getName();
+		return String.format("%s %-15s %-15s - %-15s %2d : %2d", date, name, ht, gt, homeScore, guestScore);
 	}
 	
 	public Team getWinner() {
-		
 		if (homeScore > guestScore)
 			return homeTeam;
 		if (guestScore > homeScore)
@@ -92,7 +84,6 @@ public class Match implements Comparable<Match> {
 	
 	@Override
 	public int compareTo(Match o) {
-		return Comparator.nullsLast(Comparator.comparing(Match::getDate)) //
-				.compare(this, o);
+		return Comparator.nullsLast(Comparator.comparing(Match::getDate)).compare(this, o);
 	}
 }

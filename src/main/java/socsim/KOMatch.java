@@ -14,13 +14,10 @@ public class KOMatch extends Match {
 	@Getter KOMatch previousHome;
 	@Getter KOMatch previousGuest;
 	
-	public static final BinaryOperator<KOMatch> NEXT_ROUND = (m1, m2) -> new KOMatch(m2.date.plus(1, ChronoUnit.DAYS), "NONAME", m1, m2);
+	public static final BinaryOperator<KOMatch> NEXT_ROUND = (m1, m2) -> new KOMatch(m2.date.plus(1, ChronoUnit.DAYS),
+			"NONAME", m1, m2);
 	
-	@Getter private boolean ko = false;
 	@Getter private boolean verlängerung = false;
-	
-	// Base goal scoring probabilities
-	public static final double[] base_probabilities = new double[] { 0.21, 0.3, 0.27, 0.15, 0.05, 0.01, 0.01 };
 	
 	public KOMatch(Instant date, String name, Team homeTeam, Team guestTeam) {
 		super(date, name, homeTeam, guestTeam);

@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import socsim.KOMatch;
+import socsim.Match.State;
 import socsim.Team;
 
 @Slf4j
@@ -79,35 +80,27 @@ public class C_KOMatch extends Composite {
 	public void refresh() {
 		if (match == null)
 			return;
-		log.info("Updating UI of {}", match.toString());
-		updateLabel(match.getHomeTeam(), label_team1, label_score1, match.getHomeScore());
-		updateLabel(match.getGuestTeam(), label_team2, label_score2, match.getGuestScore());
-		label_score1.setText(Integer.toString(match.getHomeScore()));
+		updateLabel(match.getHomeTeam(), label_team1, label_score1, match.getHomeScore(), match.getState());
+		updateLabel(match.getGuestTeam(), label_team2, label_score2, match.getGuestScore(), match.getState());
 		
 		lblNv.setVisible(match.isVerlängerung());
-		
 		layout();
 	}
 	
-	private void updateLabel(Team t, CLabel label_team, Label label_score, int score) {
+	private void updateLabel(Team t, CLabel label_team, Label label_score, int score, State state) {
 		if (t == null) {
 			label_team.setVisible(false);
 			label_score.setVisible(false);
 			return;
 		}
 		
-		label_team.setText(t.toString());
+		label_team.setText(t.getName());
 		label_team.setImage(t.getFlag());
 		label_team.setToolTipText(t.getTooltip());
 		
 		label_score.setText(Integer.toString(score));
 		
 		label_team.setVisible(true);
-		label_score.setVisible(score >= 0);
-	}
-	
-	public void updateWinner(Team winner) {
-		updateLabel(winner, label_team1, label_score1, 0);
-		
+		label_score.setVisible(state == State.FINISHED);
 	}
 }

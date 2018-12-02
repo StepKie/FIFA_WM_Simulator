@@ -22,15 +22,15 @@ import socsim.ui.FussballWM;
 @RequiredArgsConstructor
 public class Vorrunde implements CompetitionPhase {
 	
-	@NonNull List<Group> gruppen;
-	@NonNull List<C_Gruppe> gruppenComps;
+	@NonNull private List<Group> gruppen;
+	@NonNull private List<C_Gruppe> gruppenComps;
 	
 	@Override
 	public void step() {
 		Match vorrunde_Next = nextMatch();
-		log.info("SPIELEN VORRUNDE");
 		vorrunde_Next.play();
-		gruppenComps.stream().filter(c -> c.getGruppe().getMatches().contains(vorrunde_Next)).forEach(cgruppe -> cgruppe.refresh(vorrunde_Next));
+		log.info("VORRUNDE: {}", vorrunde_Next.toString());
+		gruppenComps.stream().forEach(cgruppe -> cgruppe.refresh(vorrunde_Next));
 		
 	}
 	

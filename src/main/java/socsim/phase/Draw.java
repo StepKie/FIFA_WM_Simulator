@@ -1,8 +1,6 @@
 package socsim.phase;
 
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -42,7 +40,6 @@ public class Draw implements CompetitionPhase {
 	
 	@Override
 	public void step() {
-		log.info("Ziehung");
 		int gruppe = revealed % 8;
 		int index = revealed / 8;
 		gruppenComps.get(gruppe).reveal(index);
@@ -61,8 +58,6 @@ public class Draw implements CompetitionPhase {
 		assert (isFinished());
 		log.info("Ziehung vorbei");
 		gruppenComps.forEach(cgruppe -> cgruppe.refresh(null));
-		
-		Instant date = new GregorianCalendar(2012, 6, 30, 16, 0).toInstant();
 		return new Vorrunde(gruppen, gruppenComps);
 	}
 	

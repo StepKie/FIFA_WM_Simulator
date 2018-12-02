@@ -75,14 +75,14 @@ public class C_Gruppe extends Composite {
 		for (int i = 0; i < gruppe.getMatches().size(); i++) {
 			Match m = gruppe.getMatches().get(i);
 			pairing[i] = new Label(this, SWT.NONE);
-			pairing[i].setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
+			pairing[i].setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false));
 			String text = m.getHomeTeam().getId() + " - " + m.getGuestTeam().getId();
 			pairing[i].setText(text);
 			pairing[i].setData(m);
 			pairing[i].setVisible(false);
 			
 			result[i] = new Label(this, SWT.NONE);
-			result[i].setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
+			result[i].setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 			result[i].setText("-:-");
 			result[i].setVisible(false);
 		}
@@ -92,7 +92,7 @@ public class C_Gruppe extends Composite {
 		gruppe.getTable().refresh();
 		for (int i = 0; i <= 3; i++) {
 			Row r = gruppe.getTable().getRows().get(i);
-			String tName = r.getTeam().toString();
+			String tName = r.getTeam().getName();
 			if (tName.length() > 15)
 				tName = tName.substring(0, 15).concat(".");
 			teams[i].teamName.setText(tName);
@@ -118,9 +118,8 @@ public class C_Gruppe extends Composite {
 		
 		// Layout (for example after reappearing position etc.
 		Stream.of(teams).forEach(C_Row::layout);
-		// Without this call to layout, labels are not refreshed correctly
-		layout();
-		pack(false);
+		// Without this call to pack, labels are not refreshed correctly
+		pack(true);
 	}
 	
 	private void setInvisible() {

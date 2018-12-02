@@ -25,11 +25,9 @@ public class KORound implements CompetitionPhase {
 	
 	public KORound(List<Team> teams, Instant date) {
 		
-		log.info("Creating KORound with {}", teams);
+		teams.forEach(t -> log.info("Qualified: {}", t.getName()));
 		List<KOMatch> firstRound = makeFirstRoundFromQualifiedTeams(teams, date);
 		matches = BinaryTree.generateTree(firstRound, KOMatch.NEXT_ROUND).getAll(Comparator.comparing(KOMatch::getDate));
-		log.info("Teams: {}, Matches created: {}", teams.size(), matches.size());
-		
 	}
 	
 	private static List<KOMatch> makeFirstRoundFromQualifiedTeams(List<Team> teams, Instant start) {
@@ -37,7 +35,6 @@ public class KORound implements CompetitionPhase {
 		assert (noOfTeams % 2 == 0);
 		var matches = new ArrayList<KOMatch>();
 		for (int i = 0; i < noOfTeams; i += 2) {
-			
 			String matchName = KOMatch.getRoundName(noOfTeams) + " " + Integer.toString(i / 2 + 1);
 			matches.add(new KOMatch(start, matchName, teams.get(i), teams.get(i + 1)));
 			start = start.plus(1, ChronoUnit.HOURS);
@@ -71,8 +68,6 @@ public class KORound implements CompetitionPhase {
 		KOMatch upNext = nextMatch();
 		upNext.play();
 		log.info("Game: {}", upNext.toString());
-		
 		gui.refresh();
-		
 	}
 }
