@@ -12,7 +12,7 @@ public enum Confederation {
 	CONMEBOL("South America", 5),
 	CONCACAF("North and Middle America", 3),
 	OFC("Australia and Oceania", 1),
-	AFC("Asia", 5);
+	AFC("Asia", 4);
 	
 	/** Human-readable name */
 	public final String name;

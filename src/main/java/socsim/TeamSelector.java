@@ -30,7 +30,7 @@ public class TeamSelector {
 	@NonNull private Collection<Team> allTeams;
 	
 	public List<Group> getGroups() {
-		return draw(allTeams);
+		return draw(getParticipants());
 	}
 	
 	public Collection<Team> getParticipants() {
@@ -76,18 +76,14 @@ public class TeamSelector {
 			if (i < 2) {
 				Collections.shuffle(topf.get(i));
 			} else {
-				Collections.sort(topf.get(i), Team.BY_NO_OF_PARTICIPANTS);
+				topf.get(i).sort(Team.BY_NO_OF_PARTICIPANTS);
 			}
 			log.info("Topf {}: {}", i, topf.get(i));
 		}
 		for (int i = 0; i < num_groups; i++) {
 			gruppe.add(new ArrayList<>());
 		}
-		
-		while (!teamsSorted.isEmpty()) {
-			Team next = teamsSorted.remove(0);
-			getValidGroup(next).add(next);
-		}
+		teamsSorted.forEach(t -> getValidGroup().add(t));
 		
 		List<Group> grps = new ArrayList<>();
 		for (int i = 0; i < num_groups; i++) {
@@ -102,12 +98,11 @@ public class TeamSelector {
 		return (int) teams.stream().filter(isUefa).count();
 	}
 	
-	private List<Team> getValidGroup(Team t) {
-		Comparator<List<?>> c = Comparator.comparingInt(List::size);
-		c.thenComparing(c);
+	private List<Team> getValidGroup() {
+		Comparator<List<Team>> c = Comparator.comparingInt(List::size);
+		Comparator<List<Team>> total = c.thenComparing(Comparator.comparingInt(g -> uefaTeams((List<Team>) g)).reversed());
 		return gruppe.stream() //
-				.sorted(Comparator.comparingInt(List::size)) //
-				.sorted(Comparator.comparingInt(g -> uefaTeams(g))) //
+				.sorted(total) //
 				.findFirst().orElseThrow();
 	}
 }
