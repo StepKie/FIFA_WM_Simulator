@@ -45,7 +45,7 @@ public class C_Gruppe extends Composite {
 	public C_Gruppe(Composite parent, int style, Group gruppe) {
 		super(parent, style);
 		this.gruppe = gruppe;
-		setLayout(new GridLayout(2, true));
+		setLayout(new GridLayout(2, false));
 		setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
 		
 		Label lblGruppenname = new Label(this, SWT.CENTER);
@@ -75,14 +75,14 @@ public class C_Gruppe extends Composite {
 		for (int i = 0; i < gruppe.getMatches().size(); i++) {
 			Match m = gruppe.getMatches().get(i);
 			pairing[i] = new Label(this, SWT.NONE);
-			pairing[i].setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false));
+			pairing[i].setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
 			String text = m.getHomeTeam().getId() + " - " + m.getGuestTeam().getId();
 			pairing[i].setText(text);
 			pairing[i].setData(m);
 			pairing[i].setVisible(false);
 			
 			result[i] = new Label(this, SWT.NONE);
-			result[i].setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+			result[i].setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
 			result[i].setText("-:-");
 			result[i].setVisible(false);
 		}
@@ -118,6 +118,7 @@ public class C_Gruppe extends Composite {
 		
 		// Layout (for example after reappearing position etc.
 		Stream.of(teams).forEach(C_Row::layout);
+		layout();
 		// Without this call to pack, labels are not refreshed correctly
 		pack(true);
 	}
