@@ -1,5 +1,6 @@
 package socsim;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.Random;
@@ -11,7 +12,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class Match implements Comparable<Match> {
+public class Match implements Comparable<Match>, Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	public enum State {
 		SCHEDULED,

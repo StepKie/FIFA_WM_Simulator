@@ -7,3 +7,4 @@ target
 workspace
 logs
 *.swp
+/stats.wm

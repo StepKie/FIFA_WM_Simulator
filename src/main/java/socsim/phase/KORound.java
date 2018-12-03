@@ -55,7 +55,7 @@ public class KORound implements CompetitionPhase {
 	public KORound createNextRound() {
 		// TODO Could split in multiple subbrackets, or implement jump() to use
 		// subbrackets ...
-		return null;
+		return this;
 	}
 	
 	@Override

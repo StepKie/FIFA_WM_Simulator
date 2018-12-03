@@ -11,11 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class KOMatch extends Match {
 	
+	private static final long serialVersionUID = 1L;
+	
 	@Getter KOMatch previousHome;
 	@Getter KOMatch previousGuest;
 	
-	public static final BinaryOperator<KOMatch> NEXT_ROUND = (m1, m2) -> new KOMatch(m2.date.plus(1, ChronoUnit.DAYS),
-			"NONAME", m1, m2);
+	public static final BinaryOperator<KOMatch> NEXT_ROUND = (m1, m2) -> new KOMatch(m2.date.plus(1, ChronoUnit.DAYS), "NONAME", m1, m2);
 	
 	@Getter private boolean verlängerung = false;
 	

@@ -6,12 +6,15 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import lombok.extern.slf4j.Slf4j;
+import socsim.io.Fussball_IO;
 import socsim.phase.CompetitionPhase;
 import socsim.phase.Draw;
 import socsim.phase.KORound;
@@ -37,6 +40,7 @@ public class FussballWM {
 	List<C_Gruppe> gruppenComps = new ArrayList<>();
 	
 	public FussballWM() {
+		Fussball_IO.readHistory();
 	}
 	
 	public static void main(String[] args) {
@@ -93,6 +97,17 @@ public class FussballWM {
 					}
 					
 				}
+			}
+		});
+		shlFussballWm.addShellListener(new ShellAdapter() {
+			
+			@Override
+			public void shellClosed(ShellEvent e) {
+				if (currentPhase instanceof KORound) {
+					Fussball_IO.saveHistory(((KORound) currentPhase).getMatches());
+				}
+				Fussball_IO.persist();
+				
 			}
 		});
 	}

@@ -9,12 +9,10 @@ import org.eclipse.swt.widgets.Label;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import socsim.KOMatch;
 import socsim.Match.State;
 import socsim.Team;
 
-@Slf4j
 public class C_KOMatch extends Composite {
 	
 	@Getter @Setter protected KOMatch match;
