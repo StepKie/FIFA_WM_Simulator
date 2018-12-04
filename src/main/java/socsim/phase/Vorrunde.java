@@ -2,8 +2,10 @@ package socsim.phase;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
@@ -37,6 +39,10 @@ public class Vorrunde implements CompetitionPhase {
 	@Override
 	public boolean isFinished() {
 		return nextMatch() == null;
+	}
+	
+	public Collection<Match> getMatches() {
+		return gruppen.stream().flatMap(g -> g.getMatches().stream()).collect(Collectors.toList());
 	}
 	
 	private Match nextMatch() {

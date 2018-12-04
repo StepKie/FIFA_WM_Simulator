@@ -6,10 +6,14 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
 
@@ -17,8 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import socsim.io.Fussball_IO;
 import socsim.phase.CompetitionPhase;
 import socsim.phase.Draw;
-import socsim.phase.KORound;
-import socsim.phase.Vorrunde;
 
 /**
  * Main UI hub
@@ -32,10 +34,6 @@ public class FussballWM {
 	
 	CompetitionPhase currentPhase;
 	protected Shell shlFussballWm;
-	
-	Draw draw;
-	Vorrunde vorrunde;
-	KORound koRunde;
 	
 	List<C_Gruppe> gruppenComps = new ArrayList<>();
 	
@@ -53,8 +51,11 @@ public class FussballWM {
 	public void open() {
 		Display display = Display.getDefault();
 		createContents();
+		currentPhase = new Draw(shlFussballWm);
 		shlFussballWm.open();
 		shlFussballWm.layout();
+		
+		log.info("New Fussball WM session started");
 		while (!shlFussballWm.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
@@ -78,8 +79,8 @@ public class FussballWM {
 		rl_shlFussballWm.center = true;
 		shlFussballWm.setLayout(rl_shlFussballWm);
 		
-		currentPhase = new Draw(shlFussballWm);
-		log.info("New Fussball WM session started");
+		createHistoryMenu();
+		
 		shlFussballWm.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -103,11 +104,24 @@ public class FussballWM {
 			
 			@Override
 			public void shellClosed(ShellEvent e) {
-				if (currentPhase instanceof KORound) {
-					Fussball_IO.saveHistory(((KORound) currentPhase).getMatches());
-				}
 				Fussball_IO.persist();
-				
+			}
+		});
+	}
+	
+	private void createHistoryMenu() {
+		Menu menu = new Menu(shlFussballWm, SWT.BAR);
+		shlFussballWm.setMenuBar(menu);
+		MenuItem mntmHistory = new MenuItem(menu, SWT.NONE);
+		mntmHistory.setText("History");
+		mntmHistory.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				new HistoryDialog(shlFussballWm).open();
+//				MessageBox messageBox = new MessageBox(shlFussballWm, SWT.ICON_INFORMATION);
+//				messageBox.setMessage("HI");
+//				messageBox.open();
 			}
 		});
 	}

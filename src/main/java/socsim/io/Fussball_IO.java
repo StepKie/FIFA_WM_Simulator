@@ -10,6 +10,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -48,8 +49,8 @@ public class Fussball_IO {
 		}
 	}
 	
-	public static void saveHistory(List<? extends Match> matches) {
-		HISTORY.addAll(matches);
+	public static void saveHistory(Match... matches) {
+		Stream.of(matches).filter(Match::isFinished).forEach(HISTORY::add);
 		
 	}
 	
@@ -80,17 +81,25 @@ public class Fussball_IO {
 		return teams;
 	}
 	
-	public static Image getLargeFlag(Team t) {
+	private static Image getFlag(Team t, int size) {
 		try {
 			CSVRecord csvRecord = getRecords().stream().filter(r -> t.getId().equals(r.get("country_code_3"))).findFirst().orElse(null);
 			String code2 = csvRecord.get("country_code_2");
-			return SWTResourceManager.getImage(TeamSelector.class, "/flags-iso/shiny/64/" + code2 + ".png");
+			return SWTResourceManager.getImage(TeamSelector.class, "/flags-iso/shiny/" + Integer.toString(size) + "/" + code2 + ".png");
 			
 		} catch (IOException e) {
 			log.warn("Did not find flag for " + t.getId(), e);
 			return null;
 		}
 		
+	}
+	
+	public static Image getLargeFlag(Team t) {
+		return getFlag(t, 64);
+	}
+	
+	public static Image getSmallFlag(Team t) {
+		return getFlag(t, 24);
 	}
 	
 	private static Collection<CSVRecord> getRecords() throws IOException {

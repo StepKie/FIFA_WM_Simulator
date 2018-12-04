@@ -6,6 +6,7 @@ import java.util.Comparator;
 import org.eclipse.swt.graphics.Image;
 
 import lombok.Value;
+import socsim.io.Fussball_IO;
 
 @Value
 public class Team implements Comparable<Team>, Serializable {
@@ -27,6 +28,10 @@ public class Team implements Comparable<Team>, Serializable {
 	@Override
 	public String toString() {
 		return name;
+	}
+	
+	public Image getFlag() {
+		return flag != null ? flag : Fussball_IO.getSmallFlag(this);
 	}
 	
 	public String getTooltip() {

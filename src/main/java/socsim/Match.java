@@ -10,6 +10,7 @@ import org.apache.commons.math3.distribution.PoissonDistribution;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import socsim.io.Fussball_IO;
 
 @RequiredArgsConstructor
 public class Match implements Comparable<Match>, Serializable {
@@ -41,7 +42,7 @@ public class Match implements Comparable<Match>, Serializable {
 		homeTeam = getHomeTeam();
 		guestTeam = getGuestTeam();
 		
-		assert (isSetup()) : "Attempted to play uninitialized match";
+		assert (isSetup() && !isFinished()) : "Attempted to play uninitialized match";
 		int eloDiff = homeTeam.getElo() - guestTeam.getElo();
 		double eloScaleFactor = 0.001 * eloDiff;
 		
@@ -60,6 +61,7 @@ public class Match implements Comparable<Match>, Serializable {
 			totalGoals--;
 		}
 		state = State.FINISHED;
+		Fussball_IO.saveHistory(this);
 	}
 	
 	public boolean isFinished() {

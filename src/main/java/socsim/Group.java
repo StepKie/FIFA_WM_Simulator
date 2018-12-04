@@ -26,20 +26,10 @@ public class Group {
 	public Group(String id, Comparator<Row> comparator, Collection<Team> teams, Instant start) {
 		this.id = id;
 		this.name = "Gruppe " + id;
-		table = new Table(comparator);
-		teams.forEach(this::addTeam);
+		this.teams.addAll(teams);
 		
 		createSchedule(start);
-	}
-	
-	public void addTeam(Team team) {
-		teams.add(team);
-		table.addTeam(team);
-	}
-	
-	public void addMatch(Match match) {
-		matches.add(match);
-		table.addMatch(match);
+		table = Table.buildTable(matches, comparator);
 	}
 	
 	public Team getTeam(String id) {
@@ -59,14 +49,13 @@ public class Group {
 	 * TODO May use a Strategy object (double-round-robin, etc.)
 	 */
 	private void createSchedule(Instant start) {
-		List<Team> byElo = teams.stream().sorted(Comparator.comparingInt(Team::getElo).reversed())
-				.collect(Collectors.toList());
-		addMatch(new Match(start, id + "1-" + id + "2", byElo.get(0), byElo.get(1)));
-		addMatch(new Match(start.plus(4, HOURS), id + "3-" + id + "4", byElo.get(2), byElo.get(3)));
-		addMatch(new Match(start.plus(8, DAYS), id + "1-" + id + "3", byElo.get(0), byElo.get(2)));
-		addMatch(new Match(start.plus(8, DAYS).plus(4, HOURS), id + "2-" + id + "4", byElo.get(1), byElo.get(3)));
-		addMatch(new Match(start.plus(16, DAYS), id + "1-" + id + "4", byElo.get(0), byElo.get(3)));
-		addMatch(new Match(start.plus(16, DAYS).plus(4, HOURS), id + "2-" + id + "3", byElo.get(1), byElo.get(2)));
+		List<Team> byElo = teams.stream().sorted(Comparator.comparingInt(Team::getElo).reversed()).collect(Collectors.toList());
+		matches.add(new Match(start, id + "1-" + id + "2", byElo.get(0), byElo.get(1)));
+		matches.add(new Match(start.plus(4, HOURS), id + "3-" + id + "4", byElo.get(2), byElo.get(3)));
+		matches.add(new Match(start.plus(8, DAYS), id + "1-" + id + "3", byElo.get(0), byElo.get(2)));
+		matches.add(new Match(start.plus(8, DAYS).plus(4, HOURS), id + "2-" + id + "4", byElo.get(1), byElo.get(3)));
+		matches.add(new Match(start.plus(16, DAYS), id + "1-" + id + "4", byElo.get(0), byElo.get(3)));
+		matches.add(new Match(start.plus(16, DAYS).plus(4, HOURS), id + "2-" + id + "3", byElo.get(1), byElo.get(2)));
 		
 	}
 }

@@ -89,7 +89,6 @@ public class C_Gruppe extends Composite {
 	}
 	
 	public void refresh(Match played) {
-		gruppe.getTable().refresh();
 		for (int i = 0; i <= 3; i++) {
 			Row r = gruppe.getTable().getRows().get(i);
 			String tName = r.getTeam().getName();
