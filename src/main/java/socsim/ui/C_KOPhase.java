@@ -26,7 +26,7 @@ public class C_KOPhase extends Composite {
 	public C_KOPhase(Composite parent, int style, KORound koRound) {
 		this(parent, style);
 		matches.forEach(m -> m.setMatch(koRound.getMatches().get(m.getOrder() - 1)));
-		setLayoutData(new RowData(FussballWM.WIDTH - 100, SWT.DEFAULT));
+		//setLayoutData(new RowData(FussballWM.WIDTH - 100, SWT.DEFAULT));
 		setVisible(true);
 		getShell().layout();
 	}

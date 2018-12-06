@@ -21,7 +21,7 @@ public class Table {
 	public static Comparator<Row> GOAL_DIFFERENCE = Comparator.comparingInt(Row::getGoalsDifference);
 	public static Comparator<Row> GOALS_SCORED = Comparator.comparingInt(Row::getGoalsFor);
 	public static Comparator<Row> DEFAULT = Comparator
-			.nullsFirst(POINTS.thenComparing(GOAL_DIFFERENCE).thenComparing(GOALS_SCORED).thenComparing(r -> r.getTeam().getId()));
+			.nullsFirst(POINTS.thenComparing(GOAL_DIFFERENCE).thenComparing(GOALS_SCORED).thenComparing(r -> r.getTeam().getElo()));
 	public static Comparator<Row> WM_2018 = DEFAULT.thenComparingInt(r -> r.getTeam().getElo());
 	
 	@NonNull private Comparator<Row> comparator = WM_2018;
@@ -144,8 +144,8 @@ public class Table {
 		}
 		
 		private void print(PrintStream out) {
-			out.println(String.format("%3d  %-12s  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d", rank, team.getName(), matchesPlayed, matchesWon,
-					matchesDrawn, matchesLost, goalsFor, goalsAgainst, goalsDifference, goalsAway, points));
+			out.println(String.format("%3d  %-12s  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d", rank, team.getName(), matchesPlayed,
+					matchesWon, matchesDrawn, matchesLost, goalsFor, goalsAgainst, goalsDifference, goalsAway, points));
 		}
 	}
 }

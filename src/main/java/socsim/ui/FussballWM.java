@@ -69,7 +69,7 @@ public class FussballWM {
 	 */
 	protected void createContents() {
 		shlFussballWm = new Shell();
-		shlFussballWm.setSize(WIDTH, HEIGHT);
+		// shlFussballWm.setSize(WIDTH, HEIGHT);
 		shlFussballWm.setImage(SWTResourceManager.getImage(this.getClass(), APPLICATION_ICON));
 		shlFussballWm.setText("Fussball WM");
 		
@@ -119,9 +119,9 @@ public class FussballWM {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				new HistoryDialog(shlFussballWm).open();
-//				MessageBox messageBox = new MessageBox(shlFussballWm, SWT.ICON_INFORMATION);
-//				messageBox.setMessage("HI");
-//				messageBox.open();
+				// MessageBox messageBox = new MessageBox(shlFussballWm, SWT.ICON_INFORMATION);
+				// messageBox.setMessage("HI");
+				// messageBox.open();
 			}
 		});
 	}

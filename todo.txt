@@ -4,6 +4,12 @@
 - Allow fine-tuning of progress (individual goals <--> skip over entire phases)
 - session-spanning stats, hence persistence (?!)
 
+Speichern wiederholt geht nicht (nur 1. Session)
+Fahne British Virgin Islands
+n.V. wird nicht angezeigt
+Reihenfolge Töpfe
+Größe ändert sich von maximiert bei Neustart, start ko phase
+Fahne langer Ländername ko phase
 DONE
 
 - Show "n.V.", (n.E.)
