@@ -38,4 +38,8 @@ public class Team implements Comparable<Team>, Serializable {
 		return toString() + "\nWertungszahl: " + getElo();
 	}
 	
+	public String getShortName() {
+		return (name.length() > 15) ? name.substring(0, 15).concat(".") : name;
+	}
+	
 }

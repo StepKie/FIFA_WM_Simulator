@@ -46,18 +46,18 @@ public class C_Gruppe extends Composite {
 		super(parent, style);
 		this.gruppe = gruppe;
 		setLayout(new GridLayout(2, false));
-		setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
+		setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false));
 		
 		Label lblGruppenname = new Label(this, SWT.CENTER);
 		lblGruppenname.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 4, 1));
 		lblGruppenname.setText(gruppe.getName());
 		
-		emptyRow(true);
+		emptyRow();
 		
 		for (int i = 0; i <= 3; i++) {
 			teams[i] = new C_Row(this, SWT.NONE);
 		}
-		emptyRow(true);
+		emptyRow();
 		
 		createMatches();
 		
@@ -65,24 +65,24 @@ public class C_Gruppe extends Composite {
 		setInvisible();
 	}
 	
-	private void emptyRow(boolean showLine) {
+	private void emptyRow() {
 		Label label = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
 		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1));
-		label.setVisible(showLine);
 	}
 	
 	private void createMatches() {
 		for (int i = 0; i < gruppe.getMatches().size(); i++) {
 			Match m = gruppe.getMatches().get(i);
 			pairing[i] = new Label(this, SWT.NONE);
-			pairing[i].setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
-			String text = m.getHomeTeam().getId() + " - " + m.getGuestTeam().getId();
+			pairing[i].setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
+			
+			String text = m.getHomeTeam().getShortName() + " - " + m.getGuestTeam().getShortName();
 			pairing[i].setText(text);
 			pairing[i].setData(m);
 			pairing[i].setVisible(false);
 			
 			result[i] = new Label(this, SWT.NONE);
-			result[i].setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
+			result[i].setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 			result[i].setText("-:-");
 			result[i].setVisible(false);
 		}
@@ -91,10 +91,8 @@ public class C_Gruppe extends Composite {
 	public void refresh(Match played) {
 		for (int i = 0; i <= 3; i++) {
 			Row r = gruppe.getTable().getRows().get(i);
-			String tName = r.getTeam().getName();
-			if (tName.length() > 15)
-				tName = tName.substring(0, 15).concat(".");
-			teams[i].teamName.setText(tName);
+			
+			teams[i].teamName.setText(r.getTeam().getShortName());
 			teams[i].teamName.setImage(r.getTeam().getFlag());
 			teams[i].teamName.setToolTipText(r.getTeam().getTooltip());
 			teams[i].teamPoints.setText(Integer.toString(r.getPoints()));
@@ -116,10 +114,7 @@ public class C_Gruppe extends Composite {
 		}
 		
 		// Layout (for example after reappearing position etc.
-		Stream.of(teams).forEach(C_Row::layout);
-		layout();
-		// Without this call to pack, labels are not refreshed correctly
-		pack(true);
+		layout(true);
 	}
 	
 	private void setInvisible() {
@@ -148,7 +143,6 @@ public class C_Gruppe extends Composite {
 		
 		Stream.of(teams).forEach(C_Row::layout);
 		layout();
-		pack(false);
 	}
 	
 	public class C_Row extends Composite {

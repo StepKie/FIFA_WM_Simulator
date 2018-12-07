@@ -1,16 +1,11 @@
 package socsim.phase;
 
 public interface CompetitionPhase {
+	
 	// assert (isFinished == false...)
 	void step();
 	
-	default CompetitionPhase jump() {
-		while (!isFinished()) {
-			step();
-		}
-		return createNextRound();
-		
-	};
+	CompetitionPhase jump();
 	
 	boolean isFinished();
 	

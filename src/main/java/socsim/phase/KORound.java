@@ -13,10 +13,9 @@ import socsim.BinaryTree;
 import socsim.KOMatch;
 import socsim.Team;
 import socsim.ui.C_KOPhase;
-import socsim.ui.FussballWM;
 
 @Slf4j
-public class KORound implements CompetitionPhase {
+public class KORound extends UI_Phase {
 	
 	@Setter C_KOPhase gui;
 	
@@ -55,19 +54,20 @@ public class KORound implements CompetitionPhase {
 	public KORound createNextRound() {
 		// TODO Could split in multiple subbrackets, or implement jump() to use
 		// subbrackets ...
-		return this;
+		if (updateUI)
+			gui.refresh();
+		return null;
 	}
 	
 	@Override
 	public void step() {
 		if (isFinished()) {
-			gui.getShell().close();
-			new FussballWM().open();
 			return;
 		}
 		KOMatch upNext = nextMatch();
 		upNext.play();
 		log.info("Game: {}", upNext.toString());
-		gui.refresh();
+		if (updateUI)
+			gui.refresh();
 	}
 }

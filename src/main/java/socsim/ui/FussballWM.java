@@ -10,7 +10,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -29,65 +30,50 @@ import socsim.phase.Draw;
 public class FussballWM {
 	
 	private static final String APPLICATION_ICON = "/FIFA-World-Cup-2018.png";
-	public static final int WIDTH = 1450;
-	public static final int HEIGHT = 400;
+	
+	public static final int DEFAULT_WIDTH = 1500;
+	public static final int DEFAULT_HEIGHT = 950;
 	
 	CompetitionPhase currentPhase;
-	protected Shell shlFussballWm;
+	private Shell shell;
 	
 	List<C_Gruppe> gruppenComps = new ArrayList<>();
 	
-	public FussballWM() {
-		Fussball_IO.readHistory();
+	public FussballWM(Shell shell) {
+		this.shell = shell;
 	}
 	
 	public static void main(String[] args) {
-		new FussballWM().open();
+		Fussball_IO.readHistory();
+		Shell newShell = new Shell();
+		newShell.setSize(new Point(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+		new FussballWM(newShell).open();
+	}
+	
+	public static void start(Shell old) {
+		Shell newShell = new Shell();
+		newShell.setSize(old.getSize());
+		newShell.setLocation(old.getLocation());
+		old.close();
+		new FussballWM(newShell).open();
 	}
 	
 	/**
 	 * @wbp.parser.entryPoint
 	 */
 	public void open() {
-		Display display = Display.getDefault();
-		createContents();
-		currentPhase = new Draw(shlFussballWm);
-		shlFussballWm.open();
-		shlFussballWm.layout();
+		configureShell();
+		currentPhase = new Draw(shell);
 		
-		log.info("New Fussball WM session started");
-		while (!shlFussballWm.isDisposed()) {
-			if (!display.readAndDispatch()) {
-				display.sleep();
-			}
-		}
-		
-	}
-	
-	/**
-	 * Create contents of the window.
-	 */
-	protected void createContents() {
-		shlFussballWm = new Shell();
-		// shlFussballWm.setSize(WIDTH, HEIGHT);
-		shlFussballWm.setImage(SWTResourceManager.getImage(this.getClass(), APPLICATION_ICON));
-		shlFussballWm.setText("Fussball WM");
-		
-		RowLayout rl_shlFussballWm = new RowLayout(SWT.HORIZONTAL);
-		rl_shlFussballWm.fill = true;
-		rl_shlFussballWm.justify = true;
-		rl_shlFussballWm.center = true;
-		shlFussballWm.setLayout(rl_shlFussballWm);
-		
-		createHistoryMenu();
-		
-		shlFussballWm.addKeyListener(new KeyAdapter() {
+		shell.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (currentPhase == null) {
+					if (e.character != SWT.ESC) {
+						FussballWM.start(shell);
+					}
 					return;
 				}
-				
 				if (e.character == SWT.ESC) {
 					currentPhase = currentPhase.jump();
 				} else {
@@ -100,8 +86,29 @@ public class FussballWM {
 				}
 			}
 		});
-		shlFussballWm.addShellListener(new ShellAdapter() {
-			
+		shell.open();
+		shell.layout();
+		log.info("New Fussball WM session started");
+		Display display = Display.getDefault();
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch()) {
+				display.sleep();
+			}
+		}
+		
+	}
+	
+	/**
+	 * Create contents of the window.
+	 */
+	private void configureShell() {
+		shell.setImage(SWTResourceManager.getImage(FussballWM.class, APPLICATION_ICON));
+		shell.setText("Fussball-WM");
+		shell.setLayout(new GridLayout(8, true));
+		
+		createHistoryMenu(shell);
+		
+		shell.addShellListener(new ShellAdapter() {
 			@Override
 			public void shellClosed(ShellEvent e) {
 				Fussball_IO.persist();
@@ -109,19 +116,16 @@ public class FussballWM {
 		});
 	}
 	
-	private void createHistoryMenu() {
-		Menu menu = new Menu(shlFussballWm, SWT.BAR);
-		shlFussballWm.setMenuBar(menu);
+	private static void createHistoryMenu(Shell shell) {
+		Menu menu = new Menu(shell, SWT.BAR);
+		shell.setMenuBar(menu);
 		MenuItem mntmHistory = new MenuItem(menu, SWT.NONE);
-		mntmHistory.setText("History");
+		mntmHistory.setText("Gesamttabelle");
 		mntmHistory.addSelectionListener(new SelectionAdapter() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				new HistoryDialog(shlFussballWm).open();
-				// MessageBox messageBox = new MessageBox(shlFussballWm, SWT.ICON_INFORMATION);
-				// messageBox.setMessage("HI");
-				// messageBox.open();
+				new HistoryDialog(shell).open();
 			}
 		});
 	}

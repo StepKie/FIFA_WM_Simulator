@@ -38,26 +38,22 @@ public class C_KOMatch extends Composite {
 		
 		this.order = order;
 		setLayout(new GridLayout(3, false));
-		GridData gd_composite_komatch = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, vertSpan);
-		gd_composite_komatch.heightHint = 80;
-		gd_composite_komatch.widthHint = 150;
+		GridData gd_composite_komatch = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, vertSpan);
+		gd_composite_komatch.heightHint = 100;
+		gd_composite_komatch.widthHint = 170;
 		setLayoutData(gd_composite_komatch);
 		
 		label_team1 = new CLabel(this, reversed ? SWT.RIGHT_TO_LEFT : SWT.NONE);
 		label_team1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		
 		lblNv = new Label(this, SWT.NONE);
-		lblNv.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 2));
-		lblNv.setVisible(false);
+		lblNv.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 2));
 		
 		label_score1 = new Label(this, SWT.NONE);
-		label_score1.setAlignment(SWT.RIGHT);
 		
 		label_team2 = new CLabel(this, reversed || order == 15 ? SWT.RIGHT_TO_LEFT : SWT.NONE);
 		label_team2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		label_score2 = new Label(this, SWT.NONE);
-		
-		label_score2.setAlignment(SWT.RIGHT);
 		
 		if (reversed) {
 			label_score1.moveAbove(label_team1);
@@ -80,9 +76,9 @@ public class C_KOMatch extends Composite {
 			return;
 		updateLabel(match.getHomeTeam(), label_team1, label_score1, match.getHomeScore(), match.getState());
 		updateLabel(match.getGuestTeam(), label_team2, label_score2, match.getGuestScore(), match.getState());
-		
+		lblNv.setText("n.V.");
 		lblNv.setVisible(match.isVerlängerung());
-		layout();
+		layout(true);
 	}
 	
 	private void updateLabel(Team t, CLabel label_team, Label label_score, int score, State state) {
@@ -91,8 +87,7 @@ public class C_KOMatch extends Composite {
 			label_score.setVisible(false);
 			return;
 		}
-		
-		label_team.setText(t.getName());
+		label_team.setText(t.getShortName());
 		label_team.setImage(t.getFlag());
 		label_team.setToolTipText(t.getTooltip());
 		

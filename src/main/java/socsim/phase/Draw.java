@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Shell;
 
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import socsim.io.Fussball_IO;
 import socsim.ui.C_Gruppe;
 
 @Slf4j
-public class Draw implements CompetitionPhase {
+public class Draw extends UI_Phase {
 	
 	private int revealed = 0;
 	private int total;
@@ -34,7 +34,11 @@ public class Draw implements CompetitionPhase {
 			total = (int) gruppen.stream().flatMap(g -> g.getTeams().stream()).count();
 			C_Gruppe gruppenComp = C_Gruppe.createWMGruppe(parent, gruppe);
 			gruppenComps.add(gruppenComp);
-			gruppenComp.setLayoutData(new RowData(SWT.DEFAULT, SWT.DEFAULT));
+			
+			GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
+			gd.heightHint = 400;
+			gd.widthHint = 170;
+			gruppenComp.setLayoutData(gd);
 		}
 	}
 	
@@ -60,5 +64,4 @@ public class Draw implements CompetitionPhase {
 		gruppenComps.forEach(cgruppe -> cgruppe.refresh(null));
 		return new Vorrunde(gruppen, gruppenComps);
 	}
-	
 }

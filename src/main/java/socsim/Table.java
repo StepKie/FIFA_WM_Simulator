@@ -13,7 +13,9 @@ import java.util.stream.Stream;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Data
 public class Table {
 	
@@ -33,6 +35,7 @@ public class Table {
 		table.comparator = comparator;
 		table.teams.addAll(teams);
 		table.matches.addAll(matches);
+		log.info("Matches in: {}, matches in table: {}", matches.size(), table.matches.size());
 		
 		matches.stream().flatMap(m -> Stream.of(m.getHomeTeam(), m.getGuestTeam())).forEach(table.teams::add);
 		return table;
@@ -144,8 +147,8 @@ public class Table {
 		}
 		
 		private void print(PrintStream out) {
-			out.println(String.format("%3d  %-12s  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d", rank, team.getName(), matchesPlayed,
-					matchesWon, matchesDrawn, matchesLost, goalsFor, goalsAgainst, goalsDifference, goalsAway, points));
+			out.println(String.format("%3d  %-12s  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d", rank, team.getName(), matchesPlayed, matchesWon,
+					matchesDrawn, matchesLost, goalsFor, goalsAgainst, goalsDifference, goalsAway, points));
 		}
 	}
 }

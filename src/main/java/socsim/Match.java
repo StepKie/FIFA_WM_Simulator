@@ -23,6 +23,7 @@ public class Match implements Comparable<Match>, Serializable {
 		FINISHED
 	}
 	
+	private int id;
 	@Getter protected Instant date;
 	@Getter protected String name;
 	@Getter protected Team homeTeam;
@@ -89,6 +90,6 @@ public class Match implements Comparable<Match>, Serializable {
 	
 	@Override
 	public int compareTo(Match o) {
-		return Comparator.nullsLast(Comparator.comparing(Match::getDate)).compare(this, o);
+		return Comparator.nullsLast(Comparator.comparing(Match::getDate).thenComparing(Match::hashCode)).compare(this, o);
 	}
 }

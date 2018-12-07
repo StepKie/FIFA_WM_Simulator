@@ -40,6 +40,7 @@ public class Fussball_IO {
 	 */
 	public static final File PERSIST_FILE = new File("stats.wm");
 	
+	@SuppressWarnings("unchecked")
 	public static void readHistory() {
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(PERSIST_FILE));) {
 			HISTORY = (List<Match>) ois.readObject();

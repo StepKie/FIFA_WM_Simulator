@@ -18,11 +18,10 @@ import socsim.Match;
 import socsim.Team;
 import socsim.ui.C_Gruppe;
 import socsim.ui.C_KOPhase;
-import socsim.ui.FussballWM;
 
 @Slf4j
 @RequiredArgsConstructor
-public class Vorrunde implements CompetitionPhase {
+public class Vorrunde extends UI_Phase {
 	
 	@NonNull private List<Group> gruppen;
 	@NonNull private List<C_Gruppe> gruppenComps;
@@ -32,7 +31,8 @@ public class Vorrunde implements CompetitionPhase {
 		Match vorrunde_Next = nextMatch();
 		vorrunde_Next.play();
 		log.info("VORRUNDE: {}", vorrunde_Next.toString());
-		gruppenComps.stream().forEach(cgruppe -> cgruppe.refresh(vorrunde_Next));
+		if (updateUI)
+			gruppenComps.stream().forEach(cgruppe -> cgruppe.refresh(vorrunde_Next));
 		
 	}
 	
@@ -58,7 +58,7 @@ public class Vorrunde implements CompetitionPhase {
 		assert (isFinished());
 		gruppenComps.forEach(cgruppe -> cgruppe.refresh(null));
 		log.info("Vorrunde vorbei");
-		getShell().setSize(FussballWM.WIDTH, FussballWM.HEIGHT * 2);
+//		getShell().setSize(FussballWM.WIDTH, FussballWM.HEIGHT * 2);
 		
 		Instant date = new GregorianCalendar(2012, 6, 30, 16, 0).toInstant();
 		var koRound = new KORound(getAF(), date);
