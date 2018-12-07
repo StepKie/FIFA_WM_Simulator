@@ -103,11 +103,24 @@ public class HistoryDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				super.widgetSelected(e);
-				table.setSortColumn(t_col);
-				table.setSortDirection(SWT.UP);
+				TableColumn sortColumn = table.getSortColumn();
+				TableColumn selectedColumn = (TableColumn) e.widget;
+				
+				int dir = table.getSortDirection();
+				if (selectedColumn.equals(sortColumn)) {
+					dir = dir == SWT.UP ? SWT.DOWN : SWT.UP;
+				} else {
+					table.setSortColumn(selectedColumn);
+					dir = SWT.UP;
+				}
+				
 				var tbl = socsim.Table.buildTable(Fussball_IO.HISTORY, comp);
 				var rows = tbl.getRows();
-				rows.sort((Comparator<Row>) t_col.getData());
+				var comp = (Comparator<Row>) t_col.getData();
+				if (dir == SWT.DOWN)
+					comp = comp.reversed();
+				rows.sort(comp);
+				table.setSortDirection(dir);
 				table.removeAll();
 				int i = 0;
 				for (Row r : rows) {
