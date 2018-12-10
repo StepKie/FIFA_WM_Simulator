@@ -14,13 +14,15 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import lombok.Getter;
 import socsim.phase.KORound;
+import socsim.phase.UI_Phase;
 
-public class C_KOPhase {
+public class C_KOPhase extends UI_Phase {
 	
 	@Getter List<C_KOMatch> matches;
 	private Button btnAgain;
 	
 	public C_KOPhase(Composite parent, int style, KORound koRound) {
+		super(koRound);
 		
 		C_KOMatch c_af1 = C_KOMatch.createCompositeKoMatch(parent, false, 1, 1);
 		C_KOMatch c_vf1 = C_KOMatch.createCompositeKoMatch(parent, false, 2, 9);
@@ -48,11 +50,13 @@ public class C_KOPhase {
 		C_KOMatch c_af8 = C_KOMatch.createCompositeKoMatch(parent, true, 1, 8);
 		
 		new Label(parent, SWT.NONE);
-		parent.layout();
 		
 		// FIXME Worst hack (why is there one more, stupid iterator )...
 		matches = Arrays.asList(c_af1, c_af2, c_af3, c_af4, c_af5, c_af6, c_af7, c_af8, c_vf1, c_vf2, c_vf3, c_vf4, c_hf1, c_hf2, c_f);
 		matches.forEach(m -> m.setMatch(koRound.getMatches().get(m.getOrder() - 1)));
+		
+		refresh();
+		parent.layout();
 	}
 	
 	private Button createButton(Composite parent) {
@@ -73,8 +77,15 @@ public class C_KOPhase {
 		return btnAgain;
 	}
 	
+	@Override
 	public void refresh() {
 		getMatches().forEach(C_KOMatch::refresh);
 		btnAgain.setVisible(getMatches().stream().allMatch(m -> m.getMatch().isFinished()));
+	}
+	
+	@Override
+	public UI_Phase createNextRound() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

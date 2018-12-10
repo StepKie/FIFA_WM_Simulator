@@ -1,5 +1,7 @@
 package socsim.ui;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -16,9 +18,12 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import lombok.extern.slf4j.Slf4j;
+import socsim.Group;
+import socsim.TeamSelector;
 import socsim.io.Fussball_IO;
 import socsim.phase.CompetitionPhase;
-import socsim.phase.Draw;
+import socsim.phase.UI_Draw;
+import socsim.phase.Vorrunde;
 
 /**
  * Main UI hub
@@ -39,6 +44,7 @@ public class FussballWM {
 	}
 	
 	public static void main(String[] args) {
+		console();
 		Fussball_IO.readHistory();
 		Shell newShell = new Shell();
 		newShell.setSize(new Point(DEFAULT_WIDTH, DEFAULT_HEIGHT));
@@ -58,7 +64,7 @@ public class FussballWM {
 	 */
 	public void open() {
 		configureShell();
-		currentPhase = new Draw(shell);
+		currentPhase = new UI_Draw(shell);
 		
 		shell.addKeyListener(new KeyAdapter() {
 			@Override
@@ -123,5 +129,14 @@ public class FussballWM {
 				new HistoryDialog(shell).open();
 			}
 		});
+	}
+	
+	public static void console() {
+		var allTeams = Fussball_IO.parseTeams();
+		List<Group> gruppen = new TeamSelector(allTeams).getGroups();
+		Vorrunde vr = new Vorrunde(gruppen);
+		CompetitionPhase finalRunde = vr.jump();
+		finalRunde.jump();
+		log.info("WM DONE");
 	}
 }

@@ -20,7 +20,7 @@ import socsim.Table.Row;
 import socsim.io.Fussball_IO;
 
 public class HistoryDialog extends Dialog {
-	private static final int DEFAULT_COL_WIDTH = 50;
+	private static final int DEFAULT_COL_WIDTH = 70;
 	Object result;
 	private Table table;
 	Comparator<Row> comp = socsim.Table.WM_2018;
@@ -39,7 +39,7 @@ public class HistoryDialog extends Dialog {
 		shell.setText("History");
 		// Your code goes here (widget creation, set result, etc).
 		createTable(shell);
-		shell.setSize(650, 800);
+		shell.setSize(800, 800);
 		shell.open();
 		Display display = parent.getDisplay();
 		while (!shell.isDisposed()) {

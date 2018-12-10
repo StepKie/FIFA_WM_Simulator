@@ -9,8 +9,10 @@ import org.apache.commons.math3.distribution.IntegerDistribution;
 import org.apache.commons.math3.distribution.PoissonDistribution;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import socsim.io.Fussball_IO;
 
+@Slf4j
 public class Match implements Comparable<Match>, Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -60,6 +62,8 @@ public class Match implements Comparable<Match>, Serializable {
 			totalGoals--;
 		}
 		state = State.FINISHED;
+		
+		log.info("Match finished: {}", toString());
 		Fussball_IO.saveHistory(this);
 	}
 	

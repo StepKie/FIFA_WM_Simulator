@@ -2,13 +2,9 @@ package socsim.phase;
 
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Shell;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -16,56 +12,37 @@ import lombok.extern.slf4j.Slf4j;
 import socsim.Group;
 import socsim.Match;
 import socsim.Team;
-import socsim.ui.C_Gruppe;
-import socsim.ui.C_KOPhase;
 
 @Slf4j
 @RequiredArgsConstructor
-public class Vorrunde extends UI_Phase {
+public class Vorrunde implements CompetitionPhase {
 	
 	@NonNull private List<Group> gruppen;
-	@NonNull private List<C_Gruppe> gruppenComps;
 	
 	@Override
 	public void step() {
 		Match vorrunde_Next = nextMatch();
 		vorrunde_Next.play();
 		log.info("VORRUNDE: {}", vorrunde_Next.toString());
-		if (updateUI)
-			gruppenComps.stream().forEach(cgruppe -> cgruppe.refresh(vorrunde_Next));
 		
 	}
 	
 	@Override
-	public boolean isFinished() {
-		return nextMatch() == null;
-	}
-	
-	public Collection<Match> getMatches() {
-		return gruppen.stream().flatMap(g -> g.getMatches().stream()).collect(Collectors.toList());
-	}
-	
-	private Match nextMatch() {
-		return gruppen.stream() //
-				.flatMap(g -> g.getMatches().stream()) //
-				.filter(m -> !m.isFinished()) //
-				.sorted() //
-				.findFirst().orElse(null);
-	}
-	
-	@Override
-	public CompetitionPhase createNextRound() {
+	public KORound createNextRound() {
 		assert (isFinished());
-		gruppenComps.forEach(cgruppe -> cgruppe.refresh(null));
 		log.info("Vorrunde vorbei");
+		
 //		getShell().setSize(FussballWM.WIDTH, FussballWM.HEIGHT * 2);
 		
 		Instant date = new GregorianCalendar(2012, 6, 30, 16, 0).toInstant();
 		var koRound = new KORound(getAF(), date);
 		
-		C_KOPhase koPhase = new C_KOPhase(getShell(), SWT.NONE, koRound);
-		koRound.setGui(koPhase);
-		koPhase.refresh();
+//		if (updateUI) {
+//			C_KOPhase koPhase = new C_KOPhase(getShell(), SWT.NONE, koRound);
+//			koRound.setGui(koPhase);
+//			gruppenComps.forEach(cgruppe -> cgruppe.refresh(null));
+//			koPhase.refresh();
+//		}
 		
 		return koRound;
 	}
@@ -82,7 +59,8 @@ public class Vorrunde extends UI_Phase {
 		);
 	}
 	
-	private Shell getShell() {
-		return gruppenComps.get(0).getShell();
+	@Override
+	public List<Match> matches() {
+		return gruppen.stream().flatMap(g -> g.getMatches().stream()).collect(Collectors.toList());
 	}
 }

@@ -7,17 +7,14 @@ import java.util.Comparator;
 import java.util.List;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import socsim.BinaryTree;
 import socsim.KOMatch;
+import socsim.Match;
 import socsim.Team;
-import socsim.ui.C_KOPhase;
 
 @Slf4j
-public class KORound extends UI_Phase {
-	
-	@Setter C_KOPhase gui;
+public class KORound implements CompetitionPhase {
 	
 	// Entire bracket (finale is the root)
 	@Getter private List<KOMatch> matches;
@@ -41,33 +38,15 @@ public class KORound extends UI_Phase {
 		return matches;
 	}
 	
-	public KOMatch nextMatch() {
-		return matches.stream().filter(m -> m.isSetup()).findFirst().orElse(null);
-	}
-	
 	@Override
-	public boolean isFinished() {
-		return (nextMatch() == null);
-	}
-	
-	@Override
-	public KORound createNextRound() {
+	public CompetitionPhase createNextRound() {
 		// TODO Could split in multiple subbrackets, or implement jump() to use
 		// subbrackets ...
-		if (updateUI)
-			gui.refresh();
 		return null;
 	}
 	
 	@Override
-	public void step() {
-		if (isFinished()) {
-			return;
-		}
-		KOMatch upNext = nextMatch();
-		upNext.play();
-		log.info("Game: {}", upNext.toString());
-		if (updateUI)
-			gui.refresh();
+	public List<? extends Match> matches() {
+		return matches;
 	}
 }

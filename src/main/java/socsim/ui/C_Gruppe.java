@@ -22,8 +22,7 @@ public class C_Gruppe extends Composite {
 	 * @wbp.factory
 	 */
 	public static C_Gruppe createWMGruppe(Composite parent, Group grp) {
-		C_Gruppe gruppe = new C_Gruppe(parent, SWT.BORDER, grp);
-		return gruppe;
+		return new C_Gruppe(parent, SWT.BORDER, grp);
 	}
 	
 	@Getter private Group gruppe;
@@ -34,6 +33,11 @@ public class C_Gruppe extends Composite {
 	
 	public C_Gruppe(Composite parent, int style) {
 		this(parent, style, GruppenFactory.getTestGroup());
+		
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
+		gd.heightHint = 400;
+		gd.widthHint = 190;
+		setLayoutData(gd);
 	}
 	
 	/**
@@ -46,7 +50,7 @@ public class C_Gruppe extends Composite {
 		super(parent, style);
 		this.gruppe = gruppe;
 		setLayout(new GridLayout(2, false));
-		setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false));
+		setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		
 		Label lblGruppenname = new Label(this, SWT.CENTER);
 		lblGruppenname.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 4, 1));
