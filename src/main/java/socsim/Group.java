@@ -19,7 +19,7 @@ public class Group {
 	
 	private String id;
 	@Getter private String name;
-	@Getter private SortedSet<Team> teams = new TreeSet<Team>();
+	@Getter private SortedSet<Team> teams = new TreeSet<Team>(Team.BY_ID);
 	@Getter private List<Match> matches = new ArrayList<Match>();
 	@Getter private Table table;
 	
@@ -32,10 +32,6 @@ public class Group {
 		table = Table.buildTable(matches, comparator);
 	}
 	
-	public Team getTeam(String id) {
-		return teams.stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
-	}
-	
 	/**
 	 * @return Team at position x (1-number of places)
 	 */
@@ -44,7 +40,7 @@ public class Group {
 	}
 	
 	/**
-	 * Create a schedule for this group.
+	 * Create a schedule for this group, using the specified start date
 	 * 
 	 * TODO May use a Strategy object (double-round-robin, etc.)
 	 */

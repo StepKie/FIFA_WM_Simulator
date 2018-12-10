@@ -8,3 +8,4 @@ workspace
 logs
 *.swp
 /stats.wm
+/dependency-reduced-pom.xml

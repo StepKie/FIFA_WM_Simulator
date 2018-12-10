@@ -14,9 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class BinaryTree<V> {
 	
-	V root;
-	BinaryTree<V> left;
-	BinaryTree<V> right;
+	private V root;
+	private BinaryTree<V> left;
+	private BinaryTree<V> right;
 	
 	public static <V> BinaryTree<V> generateTree(List<V> leafs, BinaryOperator<V> merger) {
 		Queue<BinaryTree<V>> qLeft = new LinkedList<BinaryTree<V>>();

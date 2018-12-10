@@ -98,6 +98,7 @@ public class TeamSelector {
 		return (int) teams.stream().filter(isUefa).count();
 	}
 	
+	@SuppressWarnings("unchecked")
 	private List<Team> getValidGroup() {
 		Comparator<List<Team>> c = Comparator.comparingInt(List::size);
 		Comparator<List<Team>> total = c.thenComparing(Comparator.comparingInt(g -> uefaTeams((List<Team>) g)).reversed());

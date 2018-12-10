@@ -9,10 +9,8 @@ import org.apache.commons.math3.distribution.IntegerDistribution;
 import org.apache.commons.math3.distribution.PoissonDistribution;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import socsim.io.Fussball_IO;
 
-@RequiredArgsConstructor
 public class Match implements Comparable<Match>, Serializable {
 	
 	private static final long serialVersionUID = 1L;

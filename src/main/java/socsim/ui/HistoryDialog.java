@@ -68,6 +68,7 @@ public class HistoryDialog extends Dialog {
 		TableColumn t_col_team = new TableColumn(table, SWT.FILL);
 		t_col_team.setWidth(180);
 		t_col_team.setText("Team");
+		
 		createCol("Sp.", DEFAULT_COL_WIDTH);
 		createCol("gew.", DEFAULT_COL_WIDTH);
 		createCol("un.", DEFAULT_COL_WIDTH);

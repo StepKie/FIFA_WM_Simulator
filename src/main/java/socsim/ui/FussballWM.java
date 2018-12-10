@@ -1,8 +1,5 @@
 package socsim.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -36,8 +33,6 @@ public class FussballWM {
 	
 	CompetitionPhase currentPhase;
 	private Shell shell;
-	
-	List<C_Gruppe> gruppenComps = new ArrayList<>();
 	
 	public FussballWM(Shell shell) {
 		this.shell = shell;
@@ -88,7 +83,7 @@ public class FussballWM {
 		});
 		shell.open();
 		shell.layout();
-		log.info("New Fussball WM session started");
+		log.info("New Fussball-WM session started");
 		Display display = Display.getDefault();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {

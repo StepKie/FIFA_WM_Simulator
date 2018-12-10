@@ -16,10 +16,6 @@ import socsim.Team;
 public class C_KOMatch extends Composite {
 	
 	@Getter @Setter protected KOMatch match;
-	
-	@Getter @Setter private C_KOMatch home_previous;
-	@Getter @Setter private C_KOMatch away_previous;
-	
 	@Getter int order;
 	protected CLabel label_team1;
 	protected Label label_score1;
@@ -47,6 +43,7 @@ public class C_KOMatch extends Composite {
 		label_team1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		
 		lblNv = new Label(this, SWT.NONE);
+		lblNv.setText("n.V.");
 		lblNv.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 2));
 		
 		label_score1 = new Label(this, SWT.NONE);
@@ -76,7 +73,6 @@ public class C_KOMatch extends Composite {
 			return;
 		updateLabel(match.getHomeTeam(), label_team1, label_score1, match.getHomeScore(), match.getState());
 		updateLabel(match.getGuestTeam(), label_team2, label_score2, match.getGuestScore(), match.getState());
-		lblNv.setText("n.V.");
 		lblNv.setVisible(match.isVerlängerung());
 		layout(true);
 	}
@@ -90,10 +86,9 @@ public class C_KOMatch extends Composite {
 		label_team.setText(t.getShortName());
 		label_team.setImage(t.getFlag());
 		label_team.setToolTipText(t.getTooltip());
+		label_team.setVisible(true);
 		
 		label_score.setText(Integer.toString(score));
-		
-		label_team.setVisible(true);
 		label_score.setVisible(state == State.FINISHED);
 	}
 }

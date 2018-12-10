@@ -9,7 +9,7 @@ import lombok.Value;
 import socsim.io.Fussball_IO;
 
 @Value
-public class Team implements Comparable<Team>, Serializable {
+public class Team implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	private String id;
@@ -18,12 +18,8 @@ public class Team implements Comparable<Team>, Serializable {
 	private Confederation confed;
 	private transient Image flag;
 	
+	public static Comparator<Team> BY_ID = Comparator.comparing(Team::getId);
 	public static Comparator<Team> BY_NO_OF_PARTICIPANTS = Comparator.comparingInt(t -> t.getConfed().noOfParticipants);
-	
-	@Override
-	public int compareTo(Team other) {
-		return Comparator.nullsFirst(Comparator.comparing(Team::getId)).compare(this, other);
-	}
 	
 	@Override
 	public String toString() {

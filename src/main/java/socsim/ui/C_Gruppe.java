@@ -97,6 +97,7 @@ public class C_Gruppe extends Composite {
 			teams[i].teamName.setToolTipText(r.getTeam().getTooltip());
 			teams[i].teamPoints.setText(Integer.toString(r.getPoints()));
 			teams[i].teamGoals.setText(r.getGoalsFor() + ":" + r.getGoalsAgainst());
+			teams[i].layout();
 		}
 		
 		for (int i = 0; i < result.length; i++) {
@@ -106,14 +107,11 @@ public class C_Gruppe extends Composite {
 			}
 			
 		}
-		
 		for (Label matchLabel : pairing) {
 			int colorId = matchLabel.getData().equals(played) ? SWT.COLOR_RED : SWT.COLOR_WIDGET_FOREGROUND;
 			matchLabel.setForeground(Display.getCurrent().getSystemColor(colorId));
-			
 		}
-		
-		// Layout (for example after reappearing position etc.
+		// Layout (for example after reappearing position etc.)
 		layout(true);
 	}
 	

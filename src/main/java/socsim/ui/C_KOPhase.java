@@ -24,6 +24,7 @@ public class C_KOPhase {
 		
 		C_KOMatch c_af1 = C_KOMatch.createCompositeKoMatch(parent, false, 1, 1);
 		C_KOMatch c_vf1 = C_KOMatch.createCompositeKoMatch(parent, false, 2, 9);
+		// Invisible button instead of 4 labels ...
 		createButton(parent).setVisible(false);
 		C_KOMatch c_vf2 = C_KOMatch.createCompositeKoMatch(parent, true, 2, 10);
 		C_KOMatch c_af3 = C_KOMatch.createCompositeKoMatch(parent, true, 1, 3);
@@ -74,7 +75,6 @@ public class C_KOPhase {
 	
 	public void refresh() {
 		getMatches().forEach(C_KOMatch::refresh);
-		if (getMatches().stream().allMatch(m -> m.getMatch().isFinished()))
-			btnAgain.setVisible(true);
+		btnAgain.setVisible(getMatches().stream().allMatch(m -> m.getMatch().isFinished()));
 	}
 }

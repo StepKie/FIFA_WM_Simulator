@@ -22,12 +22,12 @@ public class Table {
 	public static Comparator<Row> POINTS = Comparator.comparingInt(Row::getPoints);
 	public static Comparator<Row> GOAL_DIFFERENCE = Comparator.comparingInt(Row::getGoalsDifference);
 	public static Comparator<Row> GOALS_SCORED = Comparator.comparingInt(Row::getGoalsFor);
-	public static Comparator<Row> DEFAULT = Comparator
-			.nullsFirst(POINTS.thenComparing(GOAL_DIFFERENCE).thenComparing(GOALS_SCORED).thenComparing(r -> r.getTeam().getElo()));
+	public static Comparator<Row> DEFAULT = POINTS.thenComparing(GOAL_DIFFERENCE).thenComparing(GOALS_SCORED)
+			.thenComparing(r -> r.getTeam().getElo());
 	public static Comparator<Row> WM_2018 = DEFAULT.thenComparingInt(r -> r.getTeam().getElo());
 	
 	@NonNull private Comparator<Row> comparator = WM_2018;
-	private SortedSet<Team> teams = new TreeSet<Team>();
+	private SortedSet<Team> teams = new TreeSet<Team>(Team.BY_ID);
 	@Getter private SortedSet<Match> matches = new TreeSet<Match>();
 	
 	public static Table buildTable(Collection<Team> teams, Collection<Match> matches, @NonNull Comparator<Row> comparator) {
@@ -52,19 +52,10 @@ public class Table {
 		return new ArrayList<>(rows);
 	}
 	
-	public void addMatch(Match match) {
-		if (!teams.contains(match.getHomeTeam()))
-			throw new IllegalArgumentException("Home team \"" + match.getHomeTeam() + "\" not found in team list");
-		if (!teams.contains(match.getGuestTeam()))
-			throw new IllegalArgumentException("Guest  team \"" + match.getGuestTeam() + "\" not found in team list");
-		matches.add(match);
-	}
-	
 	public void print(PrintStream out) {
 		out.println("Pos  Team          Pld    W    D    L   GF   GA   GD   GW  Pts");
 		out.println("---  ------------  ---  ---  ---  ---  ---  ---  ---  ---  ---");
-		for (Row row : getRows())
-			row.print(out);
+		getRows().forEach(r -> out.println(r.toString()));
 	}
 	
 	@Override
@@ -97,58 +88,33 @@ public class Table {
 		
 		private Row(Team team) {
 			this.team = team;
-			refresh();
-		}
-		
-		public void refresh() {
-			points = 0;
-			matchesPlayed = 0;
-			matchesWon = 0;
-			matchesDrawn = 0;
-			matchesLost = 0;
-			goalsFor = 0;
-			goalsAgainst = 0;
-			goalsDifference = 0;
-			goalsAway = 0;
 			
 			for (Match match : Table.this.matches) {
 				if (!match.isFinished() || (!team.equals(match.getHomeTeam()) && !team.equals(match.getGuestTeam())))
 					continue;
 				
 				matchesPlayed++;
-				if (team.equals(match.getHomeTeam())) {
-					goalsFor += match.getHomeScore();
-					goalsAgainst += match.getGuestScore();
-					if (match.getHomeScore() > match.getGuestScore()) {
-						matchesWon++;
-						points += 3;
-					} else if (match.getHomeScore() == match.getGuestScore()) {
-						matchesDrawn++;
-						points++;
-					} else {
-						matchesLost++;
-					}
-				} else {
-					goalsFor += match.getGuestScore();
-					goalsAway += match.getGuestScore();
-					goalsAgainst += match.getHomeScore();
-					if (match.getHomeScore() < match.getGuestScore()) {
-						matchesWon++;
-						points += 3;
-					} else if (match.getHomeScore() == match.getGuestScore()) {
-						matchesDrawn++;
-						points++;
-					} else {
-						matchesLost++;
-					}
-				}
+				boolean isHomeTeam = team.equals(match.getHomeTeam());
+				
+				goalsFor += isHomeTeam ? match.getHomeScore() : match.getGuestScore();
+				goalsAgainst += !isHomeTeam ? match.getHomeScore() : match.getGuestScore();
 				goalsDifference = goalsFor - goalsAgainst;
+				if (goalsFor > goalsAgainst) {
+					matchesWon++;
+					points += 3;
+				} else if (goalsFor == goalsAgainst) {
+					matchesDrawn++;
+					points++;
+				} else {
+					matchesLost++;
+				}
 			}
 		}
 		
-		private void print(PrintStream out) {
-			out.println(String.format("%3d  %-12s  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d", rank, team.getName(), matchesPlayed, matchesWon,
-					matchesDrawn, matchesLost, goalsFor, goalsAgainst, goalsDifference, goalsAway, points));
+		@Override
+		public String toString() {
+			return String.format("%3d  %-12s  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d  %3d", rank, team.getName(), matchesPlayed, matchesWon,
+					matchesDrawn, matchesLost, goalsFor, goalsAgainst, goalsDifference, goalsAway, points);
 		}
 	}
 }
