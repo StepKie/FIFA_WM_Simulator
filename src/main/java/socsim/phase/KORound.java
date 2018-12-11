@@ -6,18 +6,16 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import socsim.BinaryTree;
 import socsim.KOMatch;
-import socsim.Match;
 import socsim.Team;
 
 @Slf4j
 public class KORound implements CompetitionPhase {
 	
 	// Entire bracket (finale is the root)
-	@Getter private List<KOMatch> matches;
+	private List<KOMatch> matches;
 	
 	public KORound(List<Team> teams, Instant date) {
 		
@@ -46,7 +44,7 @@ public class KORound implements CompetitionPhase {
 	}
 	
 	@Override
-	public List<? extends Match> matches() {
+	public List<KOMatch> matches() {
 		return matches;
 	}
 }

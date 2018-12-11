@@ -22,7 +22,6 @@ import socsim.Group;
 import socsim.TeamSelector;
 import socsim.io.Fussball_IO;
 import socsim.phase.CompetitionPhase;
-import socsim.phase.UI_Draw;
 import socsim.phase.Vorrunde;
 
 /**
@@ -83,7 +82,6 @@ public class FussballWM {
 						currentPhase = currentPhase.createNextRound();
 						
 					}
-					
 				}
 			}
 		});

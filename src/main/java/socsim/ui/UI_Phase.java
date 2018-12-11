@@ -1,17 +1,18 @@
-package socsim.phase;
+package socsim.ui;
 
 import java.util.List;
 
 import socsim.Match;
+import socsim.phase.CompetitionPhase;
 
-public abstract class UI_Phase implements CompetitionPhase {
+public abstract class UI_Phase<T extends CompetitionPhase> implements CompetitionPhase {
 	
 	protected boolean updateUI = true;
-	protected CompetitionPhase delegate;
+	protected T delegate;
 	
 	public abstract void refresh();
 	
-	public UI_Phase(CompetitionPhase delegate) {
+	public UI_Phase(T delegate) {
 		this.delegate = delegate;
 	}
 	
@@ -32,11 +33,7 @@ public abstract class UI_Phase implements CompetitionPhase {
 	}
 	
 	@Override
-	public abstract UI_Phase createNextRound();
-	
-	@Override
 	public List<? extends Match> matches() {
-		// TODO Auto-generated method stub
 		return delegate.matches();
 	}
 }

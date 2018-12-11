@@ -142,7 +142,6 @@ public class C_Gruppe extends Composite {
 			Stream.of(pairing).forEach(l -> l.setVisible(true));
 			Stream.of(result).forEach(l -> l.setVisible(true));
 		}
-		
 		Stream.of(teams).forEach(C_Row::layout);
 		layout();
 	}

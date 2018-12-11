@@ -23,7 +23,6 @@ public class Match implements Comparable<Match>, Serializable {
 		FINISHED
 	}
 	
-	private int id;
 	@Getter protected Instant date;
 	@Getter protected String name;
 	@Getter protected Team homeTeam;

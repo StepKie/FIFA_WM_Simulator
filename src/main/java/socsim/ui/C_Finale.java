@@ -16,7 +16,7 @@ public class C_Finale extends C_KOMatch {
 		setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 2, 2));
 		setLayout(new GridLayout(3, false));
 		
-		GridData gd_lbl_finale_t1 = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
+		var gd_lbl_finale_t1 = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
 		gd_lbl_finale_t1.widthHint = 170;
 		gd_lbl_finale_t1.heightHint = 60;
 		label_team1.setLayoutData(gd_lbl_finale_t1);
@@ -40,6 +40,5 @@ public class C_Finale extends C_KOMatch {
 		winner.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN));
 		winner.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
 		layout(true);
-		
 	}
 }

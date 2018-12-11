@@ -44,7 +44,7 @@ public class C_KOMatch extends Composite {
 		
 		lblNv = new Label(this, SWT.NONE);
 		lblNv.setText("n.V.");
-		lblNv.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 2));
+		lblNv.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 2));
 		
 		label_score1 = new Label(this, SWT.NONE);
 		
@@ -53,10 +53,12 @@ public class C_KOMatch extends Composite {
 		label_score2 = new Label(this, SWT.NONE);
 		
 		if (reversed) {
+			var gd = new GridData(SWT.RIGHT, SWT.CENTER, true, true);
+			label_team1.setLayoutData(gd);
+			label_team2.setLayoutData(gd);
+			
 			label_score1.moveAbove(label_team1);
-			label_team1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 			label_score2.moveAbove(label_team2);
-			label_team2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1));
 			lblNv.moveAbove(label_team1);
 		}
 	}
