@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import socsim.Match;
+import socsim.io.Fussball_IO;
 
 public interface CompetitionPhase {
 	
@@ -13,6 +14,8 @@ public interface CompetitionPhase {
 			return;
 		Match next = nextMatch();
 		next.play();
+		Fussball_IO.saveHistory(next);
+		
 	};
 	
 	default CompetitionPhase jump() {

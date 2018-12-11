@@ -43,7 +43,7 @@ public class FussballWM {
 	}
 	
 	public static void main(String[] args) {
-		console();
+//		console();
 		Fussball_IO.readHistory();
 		Shell newShell = new Shell();
 		newShell.setSize(new Point(DEFAULT_WIDTH, DEFAULT_HEIGHT));

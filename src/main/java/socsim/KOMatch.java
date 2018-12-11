@@ -63,7 +63,6 @@ public class KOMatch extends Match {
 			} else {
 				guestScore += 2;
 			}
-			
 		}
 	}
 	

@@ -22,7 +22,7 @@ public final class GruppenFactory {
 		log.info("Creating Group {}: {}", id, teams);
 		Instant offset = WM_START.plus(id, DAYS);
 		
-		return new Group(getName(id), Table.WM_2018, teams, offset);
+		return new Group(getName(id), Table.DEFAULT, teams, offset);
 	}
 	
 	public static final String getName(int i) {
@@ -37,6 +37,6 @@ public final class GruppenFactory {
 		var teams = List.of(new Team("CZE", "Tschechien", 1200, Confederation.UEFA, null),
 				new Team("GRE", "Griechenland", 1000, Confederation.UEFA, null), new Team("POL", "Polen", 1000, Confederation.UEFA, null),
 				new Team("RUS", "Russland", 1000, Confederation.UEFA, null));
-		return new Group("T", Table.WM_2018, teams, WM_START);
+		return new Group("T", Table.DEFAULT, teams, WM_START);
 	}
 }

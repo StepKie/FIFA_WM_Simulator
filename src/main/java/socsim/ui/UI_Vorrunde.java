@@ -20,7 +20,8 @@ public class UI_Vorrunde extends UI_Phase<Vorrunde> {
 	
 	@Override
 	public void refresh() {
-		gruppenComps.stream().forEach(cgruppe -> cgruppe.refresh(lastMatch()));
+		var lastUpdate = isFinished() ? null : lastMatch();
+		gruppenComps.stream().forEach(cgruppe -> cgruppe.refresh(lastUpdate));
 		
 	}
 	

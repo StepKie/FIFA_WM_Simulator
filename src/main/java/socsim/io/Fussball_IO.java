@@ -44,6 +44,7 @@ public class Fussball_IO {
 	public static void readHistory() {
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(PERSIST_FILE));) {
 			HISTORY = (List<Match>) ois.readObject();
+			HISTORY.forEach(m -> log.debug(m.toString()));
 			log.info("Loaded {} matches from history ...", HISTORY.size());
 		} catch (IOException | ClassNotFoundException e) {
 			log.error("Could not read previous session, ignore if first run. Using default settings", e);
@@ -96,6 +97,7 @@ public class Fussball_IO {
 	}
 	
 	public static Image getLargeFlag(Team t) {
+		log.warn("64 flags not committed in repository, place them manually in src/main/resources ...");
 		return getFlag(t, 64);
 	}
 	

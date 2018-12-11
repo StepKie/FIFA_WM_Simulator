@@ -3,7 +3,6 @@ package socsim;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
@@ -13,9 +12,7 @@ import java.util.stream.Stream;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Data
 public class Table {
 	
@@ -24,26 +21,18 @@ public class Table {
 	public static Comparator<Row> GOALS_SCORED = Comparator.comparingInt(Row::getGoalsFor);
 	public static Comparator<Row> DEFAULT = POINTS.thenComparing(GOAL_DIFFERENCE).thenComparing(GOALS_SCORED)
 			.thenComparing(r -> r.getTeam().getElo());
-	public static Comparator<Row> WM_2018 = DEFAULT.thenComparingInt(r -> r.getTeam().getElo());
 	
-	@NonNull private Comparator<Row> comparator = WM_2018;
+	@NonNull private Comparator<Row> comparator = DEFAULT;
 	private SortedSet<Team> teams = new TreeSet<Team>(Team.BY_ID);
 	@Getter private SortedSet<Match> matches = new TreeSet<Match>();
 	
-	public static Table buildTable(Collection<Team> teams, Collection<Match> matches, @NonNull Comparator<Row> comparator) {
-		Table table = new Table();
-		table.comparator = comparator;
-		table.teams.addAll(teams);
-		table.matches.addAll(matches);
-		log.info("Matches in: {}, matches in table: {}", matches.size(), table.matches.size());
-		
-		matches.stream().flatMap(m -> Stream.of(m.getHomeTeam(), m.getGuestTeam())).forEach(table.teams::add);
-		return table;
-	}
-	
 	// TODO @Builder?
 	public static Table buildTable(Collection<Match> matches, @NonNull Comparator<Row> comparator) {
-		return buildTable(Collections.emptyList(), matches, comparator);
+		Table table = new Table();
+		table.comparator = comparator;
+		table.matches.addAll(matches);
+		matches.stream().flatMap(m -> Stream.of(m.getHomeTeam(), m.getGuestTeam())).forEach(table.teams::add);
+		return table;
 	}
 	
 	public List<Row> getRows() {
@@ -96,18 +85,22 @@ public class Table {
 				matchesPlayed++;
 				boolean isHomeTeam = team.equals(match.getHomeTeam());
 				
-				goalsFor += isHomeTeam ? match.getHomeScore() : match.getGuestScore();
-				goalsAgainst += !isHomeTeam ? match.getHomeScore() : match.getGuestScore();
-				goalsDifference = goalsFor - goalsAgainst;
-				if (goalsFor > goalsAgainst) {
+				int goalsFor = isHomeTeam ? match.getHomeScore() : match.getGuestScore();
+				int goalsAgainst = !isHomeTeam ? match.getHomeScore() : match.getGuestScore();
+				int goalsDifference = goalsFor - goalsAgainst;
+				if (goalsDifference > 0) {
 					matchesWon++;
 					points += 3;
-				} else if (goalsFor == goalsAgainst) {
+				} else if (goalsDifference == 0) {
 					matchesDrawn++;
 					points++;
 				} else {
 					matchesLost++;
 				}
+				this.goalsFor += goalsFor;
+				this.goalsAgainst += goalsAgainst;
+				this.goalsDifference += goalsDifference;
+				
 			}
 		}
 		

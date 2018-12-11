@@ -23,7 +23,7 @@ public class HistoryDialog extends Dialog {
 	private static final int DEFAULT_COL_WIDTH = 70;
 	Object result;
 	private Table table;
-	Comparator<Row> comp = socsim.Table.WM_2018;
+	Comparator<Row> comp = socsim.Table.DEFAULT;
 	
 	public HistoryDialog(Shell parent, int style) {
 		super(parent, style);
@@ -69,10 +69,10 @@ public class HistoryDialog extends Dialog {
 		t_col_team.setWidth(180);
 		t_col_team.setText("Team");
 		
-		createCol("Sp.", DEFAULT_COL_WIDTH);
-		createCol("gew.", DEFAULT_COL_WIDTH);
-		createCol("un.", DEFAULT_COL_WIDTH);
-		createCol("verl.", DEFAULT_COL_WIDTH);
+		createCol("Sp.", DEFAULT_COL_WIDTH, Comparator.comparingInt(Row::getMatchesPlayed));
+		createCol("gew.", DEFAULT_COL_WIDTH, Comparator.comparingInt(Row::getMatchesWon));
+		createCol("un.", DEFAULT_COL_WIDTH, Comparator.comparingInt(Row::getMatchesDrawn));
+		createCol("verl.", DEFAULT_COL_WIDTH, Comparator.comparingInt(Row::getMatchesLost));
 		createCol("Tore", DEFAULT_COL_WIDTH, socsim.Table.GOALS_SCORED);
 		createCol("Diff.", DEFAULT_COL_WIDTH, socsim.Table.GOAL_DIFFERENCE);
 		createCol("Punkte", DEFAULT_COL_WIDTH, socsim.Table.POINTS);
@@ -117,6 +117,7 @@ public class HistoryDialog extends Dialog {
 				
 				var tbl = socsim.Table.buildTable(Fussball_IO.HISTORY, comp);
 				var rows = tbl.getRows();
+				@SuppressWarnings("unchecked")
 				var comp = (Comparator<Row>) t_col.getData();
 				if (dir == SWT.DOWN)
 					comp = comp.reversed();
