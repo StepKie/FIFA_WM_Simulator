@@ -18,8 +18,7 @@ public class UI_Draw extends UI_Phase<Draw> {
 	List<C_Gruppe> gruppenComps = new ArrayList<>();
 	
 	public UI_Draw(Shell parent) {
-		
-		super(new Draw(8, 4));
+		super(Draw.DEFAULT);
 		this.shell = parent;
 		delegate.getGruppen().forEach(g -> gruppenComps.add(C_Gruppe.createWMGruppe(shell, g)));
 	}
