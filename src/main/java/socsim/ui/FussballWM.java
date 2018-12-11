@@ -119,7 +119,7 @@ public class FussballWM {
 		Menu menu = new Menu(shell, SWT.BAR);
 		shell.setMenuBar(menu);
 		MenuItem mntmHistory = new MenuItem(menu, SWT.NONE);
-		mntmHistory.setText("Gesamttabelle");
+		mntmHistory.setText("Statistik");
 		mntmHistory.addSelectionListener(new SelectionAdapter() {
 			
 			@Override

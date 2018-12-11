@@ -29,8 +29,8 @@ public class KORound implements CompetitionPhase {
 		assert (noOfTeams % 2 == 0);
 		var matches = new ArrayList<KOMatch>();
 		for (int i = 0; i < noOfTeams; i += 2) {
-			String matchName = KOMatch.getRoundName(noOfTeams) + " " + Integer.toString(i / 2 + 1);
-			matches.add(new KOMatch(start, matchName, teams.get(i), teams.get(i + 1)));
+			int number = i / 2 + 1;
+			matches.add(new KOMatch(start, 1, number, teams.get(i), teams.get(i + 1)));
 			start = start.plus(1, ChronoUnit.HOURS);
 		}
 		return matches;
