@@ -17,14 +17,16 @@ public class Draw implements CompetitionPhase {
 	
 	public final int num_groups;
 	public final int teamsInGrp;
-
-	public static final Draw DEFAULT = new Draw(8, 4);
 	
 	public Draw(int num_groups, int teamsInGrp) {
 		this.num_groups = num_groups;
 		this.teamsInGrp = teamsInGrp;
 		var allTeams = Fussball_IO.parseTeams();
 		gruppen = new TeamSelector(allTeams).getGroups();
+	}
+	
+	public static final Draw getDefault() {
+		return new Draw(8, 4);
 	}
 	
 	@Override
