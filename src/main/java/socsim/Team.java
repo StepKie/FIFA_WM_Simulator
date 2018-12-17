@@ -12,11 +12,11 @@ import socsim.io.Fussball_IO;
 public class Team implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	private String id;
-	private String name;
-	private int elo;
-	private Confederation confed;
-	private transient Image flag;
+	String id;
+	String name;
+	int elo;
+	Confederation confed;
+	transient Image flag;
 	
 	public static Comparator<Team> BY_ID = Comparator.comparing(Team::getId);
 	public static Comparator<Team> BY_NO_OF_PARTICIPANTS = Comparator.comparingInt(t -> t.getConfed().noOfParticipants);
