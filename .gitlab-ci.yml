@@ -1,5 +1,9 @@
 image: maven:3-jdk-11
 
+cache:
+  paths:
+    - .m2/repository
+    
 build:
     stage: build
     script:
