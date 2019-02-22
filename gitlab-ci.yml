@@ -1,0 +1,6 @@
+image: maven:3-jdk-7
+
+build:
+    stage: build
+    script:
+       - mvn install
