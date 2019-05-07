@@ -7,3 +7,5 @@
 * Build with Apache Maven:
   * mvn install 
   * java -jar target/soccer-simulation-0.0.1-SNAPSHOT.jar
+  
+![Screenshot](https://raw.github.com/Hottemax/soccer-simulation/master/screenshot.png)
