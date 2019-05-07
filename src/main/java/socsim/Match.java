@@ -60,6 +60,7 @@ public class Match implements Comparable<Match>, Serializable {
 			totalGoals--;
 		}
 		state = State.FINISHED;
+		log.debug(toString());
 	}
 	
 	public boolean isFinished() {
